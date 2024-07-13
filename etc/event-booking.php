@@ -11,7 +11,7 @@ use Lyrasoft\EventBooking\Payment\TransferPayment;
 use Lyrasoft\Sequence\Service\SequenceService;
 use Lyrasoft\Toolkit\Encode\BaseConvert;
 
-use function Lyrasoft\EventBooking\priceFormat;
+use function Lyrasoft\EventBooking\numberFormat;
 
 return [
     'event_booking' => [
@@ -59,7 +59,7 @@ return [
             }
         ],
 
-        'price_formatter' => static fn(mixed $price) => priceFormat($price, '$'),
+        'price_formatter' => static fn(mixed $price) => numberFormat($price, '$'),
 
         'payment' => [
             'no_handler' => function (EventOrder $order) {

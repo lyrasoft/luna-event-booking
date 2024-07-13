@@ -26,7 +26,7 @@ use Windwalker\Core\Language\LangService;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
 
-use function Lyrasoft\EventBooking\priceFormat;
+use function Lyrasoft\EventBooking\numberFormat;
 
 /**
  * @var $item EventPlan
@@ -167,9 +167,9 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                             {{-- Sold / Quota --}}
                             <td class="text-end">
-                                {{ priceFormat($item->getSold()) }}
+                                {{ numberFormat($item->getSold()) }}
                                 /
-                                {{ priceFormat($item->getQuota()) }}
+                                {{ numberFormat($item->getQuota()) }}
                             </td>
 
                             <td>

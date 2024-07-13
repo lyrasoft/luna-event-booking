@@ -6,7 +6,7 @@ namespace Lyrasoft\EventBooking {
 
     use Brick\Math\BigNumber;
 
-    function priceFormat(mixed $num, string $prefix = ''): string
+    function numberFormat(mixed $num, string $prefix = ''): string
     {
         if ($num instanceof BigNumber) {
             $num = $num->toFloat();
