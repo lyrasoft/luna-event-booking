@@ -6,7 +6,7 @@ namespace Lyrasoft\EventBooking {
 
     use Brick\Math\BigNumber;
 
-    function numberFormat(mixed $num, string $prefix = ''): string
+    function numberFormat(mixed $num, string $prefix = '', int $decimals = 0): string
     {
         if ($num instanceof BigNumber) {
             $num = $num->toFloat();
@@ -20,7 +20,7 @@ namespace Lyrasoft\EventBooking {
 
         $negative = $n < 0;
 
-        $price = $prefix . number_format(abs($n));
+        $price = $prefix . number_format(abs($n), $decimals);
 
         return $negative ? '-' . $price : $price;
     }
