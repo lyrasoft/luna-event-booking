@@ -43,7 +43,7 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
 
 @extends(
     $inStage
-        ? 'layout.event.event-stage-edit-layout'
+        ? 'event.layout.event-stage-edit-layout'
         : 'admin.global.body-list'
 )
 

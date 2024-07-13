@@ -48,11 +48,11 @@ $url = $nav->self();
             >
                 活動梯次
             </a>
-            <a class="nav-item nav-link"
-                @attr('href', '#')
-            >
-                報名者資訊
-            </a>
+            {{--<a class="nav-item nav-link"--}}
+            {{--    @attr('href', '#')--}}
+            {{-->--}}
+            {{--    報名者資訊--}}
+            {{--</a>--}}
         </nav>
     </div>
 </div>

@@ -26,7 +26,7 @@ use Windwalker\Core\Language\LangService;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
 
-use function EventBooking\priceFormat;
+use function Lyrasoft\EventBooking\priceFormat;
 
 /**
  * @var $item EventPlan
@@ -35,7 +35,7 @@ use function EventBooking\priceFormat;
 $workflow = $app->service(BasicStateWorkflow::class);
 ?>
 
-@extends('layout.event.event-stage-edit-layout')
+@extends('event.layout.event-stage-edit-layout')
 
 @section('toolbar-buttons')
     @include('list-toolbar')

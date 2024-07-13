@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventBooking {
+namespace Lyrasoft\EventBooking {
 
     use Brick\Math\BigNumber;
 

@@ -1,5 +1,5 @@
 {
-    "name": "lyrasoft/luna-event-booking",
+    "name": "lyrasoft/event-booking",
     "description": "LYRASOFT Event Booking Package",
     "type": "windwalker-package",
     "license": "MIT",
@@ -18,7 +18,15 @@
         }
     ],
     "minimum-stability": "beta",
-    "require": {},
+    "require": {
+        "php": ">=8.2",
+        "lyrasoft/luna": "^2.1",
+        "lyrasoft/member": "^1.0",
+        "lyrasoft/attachment": "^1.0",
+        "lyrasoft/sequence": "^1.0",
+        "brick/math": "^0.11.0",
+        "chillerlan/php-qrcode": "^5.0"
+    },
     "extra": {
         "windwalker":{
             "packages": [

@@ -75,17 +75,17 @@ $histories = $item->getHistories();
             <div class="row l-order-info">
                 {{-- Col 1 --}}
                 <div class="col-lg-4">
-                    <x-order-info.col1 :item="$item" :event="$event" :stage="$stage"></x-order-info.col1>
+                    <x-event.order-info.col1 :item="$item" :event="$event" :stage="$stage"></x-event.order-info.col1>
                 </div>
 
                 {{-- Col 2 --}}
                 <div class="col-lg-4">
-                    <x-order-info.col2 :item="$item"></x-order-info.col2>
+                    <x-event.order-info.col2 :item="$item"></x-event.order-info.col2>
                 </div>
 
                 {{-- Col 3 --}}
                 <div class="col-lg-4">
-                    <x-order-info.col3 :item="$item"></x-order-info.col3>
+                    <x-event.order-info.col3 :item="$item"></x-event.order-info.col3>
                 </div>
             </div>
 
@@ -95,7 +95,7 @@ $histories = $item->getHistories();
                     參與人員
                 </h4>
 
-                <x-order-info.attends :item="$item" :attends="$attends"></x-order-info.attends>
+                <x-event.order-info.attends :item="$item" :attends="$attends"></x-event.order-info.attends>
 
                 <div class="card-body">
                     @php

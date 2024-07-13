@@ -32,7 +32,7 @@ use Windwalker\Form\Form;
  */
 ?>
 
-@extends('layout.event.event-stage-edit-layout')
+@extends('event.layout.event-stage-edit-layout')
 
 @section('toolbar-buttons')
     @include('edit-toolbar')
