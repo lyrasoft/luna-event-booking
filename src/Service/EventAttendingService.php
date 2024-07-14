@@ -55,14 +55,25 @@ class EventAttendingService
         return $this->app->state->remember(static::getAttendingSessionKey($stageId), $data);
     }
 
-    public function getPlanAndQuantity(int $stageId, string $inputField = 'quantity'): array
+    public function setPlansAndQuantity(int $stageId, array $map, bool $override = false): ?array
     {
-        $quantity = $this->app->input($inputField);
+        $data = (array) $this->getAttendingDataFromSession($stageId);
 
-        if ($quantity !== null) {
-            return $quantity;
+        $data['quantity'] ??= [];
+
+        if ($override) {
+            $data['quantity'] = [];
         }
 
+        foreach ($map as $planId => $quantity) {
+            $data['quantity'][(int) $planId] = (int) $quantity;
+        }
+
+        return $this->rememberAttendingData($stageId, $data);
+    }
+
+    public function getPlansAndQuantity(int $stageId): array
+    {
         $data = (array) $this->getAttendingDataFromSession($stageId);
 
         return $data['quantity'] ?? [];
@@ -99,6 +110,13 @@ class EventAttendingService
         }
 
         return $plan;
+    }
+
+    public function getStoreByPlansQuantity(EventStage|int $stage, array $maps, bool $lock = false): EventAttendingStore
+    {
+        $this->setPlansAndQuantity($stage->getId(), $maps, true);
+
+        return $this->getAttendingStore($stage, $lock);
     }
 
     public function getAttendingStore(EventStage|int $stage, bool $lock = false): EventAttendingStore

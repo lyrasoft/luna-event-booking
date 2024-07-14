@@ -292,7 +292,7 @@ class EventAttend implements EntityInterface
         return $this;
     }
 
-    public function getScreenshots(): array
+    public function &getScreenshots(): array
     {
         return $this->screenshots;
     }

@@ -24,7 +24,7 @@ class EventViewService
     /**
      * @param  EventStage|int  $stage
      *
-     * @return  array{ 0: Event, 1: EventStage, 2: Category }
+     * @return  array{ 0: Event, 1: EventStage, 2: ?Category }
      */
     public function checkStageAvailableById(EventStage|int $stage): array
     {
@@ -44,7 +44,7 @@ class EventViewService
      * @param  Event       $event
      * @param  EventStage  $stage
      *
-     * @return  array{ 0: Event, 1: EventStage, 2: Category }
+     * @return  array{ 0: Event, 1: EventStage, 2: ?Category }
      */
     public function checkEventAndStageAvailable(Event $event, EventStage $stage): array
     {
@@ -57,7 +57,7 @@ class EventViewService
     /**
      * @param  Event  $event
      *
-     * @return  array{ 0: Event, 1: Category }
+     * @return  array{ 0: Event, 1: ?Category }
      */
     public function checkEventAvailable(Event $event): array
     {
@@ -74,9 +74,9 @@ class EventViewService
         }
 
         /** @var Category $category */
-        $category = $this->getCategoryOrFail($event->getCategoryId());
+        $category = $this->getCategory($event->getCategoryId());
 
-        if (!$category->getState()->isPublished()) {
+        if ($category && !$category->getState()->isPublished()) {
             throw new RouteNotFoundException('Category not published.');
         }
 

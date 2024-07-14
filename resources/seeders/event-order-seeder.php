@@ -48,6 +48,8 @@ $seeder->import(
         $orm,
         $db
     ) {
+        $lang->loadAllFromVendor(EventBookingPackage::class, 'ini');
+
         $faker = $seeder->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
 
         $userIds = $orm->findColumn(User::class, 'id')->dump();

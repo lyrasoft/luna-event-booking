@@ -37,7 +37,7 @@ class EventAttendingController
 
         [$event, $stage] = $eventViewService->checkStageAvailableById($stageId);
 
-        $quantity = $eventAttendingService->getPlanAndQuantity($stageId);
+        $quantity = $app->input('quantity') ?? $eventAttendingService->getPlansAndQuantity($stageId);
 
         $eventAttendingService->rememberAttendingData(
             $stageId,
