@@ -18,7 +18,7 @@ class EventOrderHistory extends ValueObject
 
     public OrderHistoryType $type;
 
-    public EventOrderState $state;
+    public ?EventOrderState $state = null;
 
     public string $stateText = '';
 
@@ -64,14 +64,14 @@ class EventOrderHistory extends ValueObject
         return $this;
     }
 
-    public function getState(): EventOrderState
+    public function getState(): ?EventOrderState
     {
         return $this->state;
     }
 
-    public function setState(EventOrderState|string $state): static
+    public function setState(EventOrderState|string|null $state): static
     {
-        $this->state = EventOrderState::wrap($state);
+        $this->state = EventOrderState::tryWrap($state);
 
         return $this;
     }
