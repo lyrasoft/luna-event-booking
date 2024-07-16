@@ -6,6 +6,8 @@ namespace App\Config;
 
 use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
+use Lyrasoft\EventBooking\Enum\AttendState;
+use Lyrasoft\EventBooking\Enum\EventOrderState;
 use Lyrasoft\EventBooking\EventBookingPackage;
 use Lyrasoft\EventBooking\Payment\TransferPayment;
 use Lyrasoft\Sequence\Service\SequenceService;
@@ -36,7 +38,8 @@ return [
                     'EVT' . \Windwalker\now('ym') . '-',
                     5
                 );
-            }
+            },
+            'initial_state' => static fn(EventOrder $order, EventAttend $attend) => AttendState::PENDING,
         ],
 
         'attends' => [
@@ -46,7 +49,8 @@ return [
                     'A' . \Windwalker\now('ym') . '-',
                     6
                 );
-            }
+            },
+            'initial_state' => static fn(EventOrder $order) => EventOrderState::UNPAID,
         ],
 
         'invoice' => [

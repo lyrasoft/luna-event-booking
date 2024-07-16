@@ -145,7 +145,7 @@ $seeder->import(
                         ->setType(OrderHistoryType::SYSTEM)
                         ->setMessage('Order Created')
                 );
-            $item->setPayment('atm');
+            // $item->setPayment('atm');
             $item->setExpiredAt('+14days');
             $item->setScreenshots(
                 [

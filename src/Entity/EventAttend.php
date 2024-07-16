@@ -280,7 +280,7 @@ class EventAttend implements EntityInterface
         return $this;
     }
 
-    public function getDetails(): array
+    public function &getDetails(): array
     {
         return $this->details;
     }

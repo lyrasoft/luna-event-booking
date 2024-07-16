@@ -73,7 +73,7 @@ class EventCheckoutService
     {
         // Todo: Handle Alternates
 
-        $order->setState(EventOrderState::UNPAID);
+        $order->setState($this->orderService->getInitialState($order));
         $order->getHistories()
             ->unshift(
                 (new EventOrderHistory())
@@ -90,7 +90,7 @@ class EventCheckoutService
     public function prepareEventAttend(EventOrder $order, EventAttend $attend): EventAttend
     {
         $attend->setOrderId($order->getId());
-        $attend->setState(AttendState::PENDING);
+        $attend->setState($this->attendeeService->getInitialState($order, $attend));
 
         return $attend;
     }

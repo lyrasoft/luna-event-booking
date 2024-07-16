@@ -99,7 +99,7 @@ class EventAttendingService
 
         if (
             $plan->getStageId() !== $stage->getId()
-            || !$plan->isPublishUp()
+            || ($plan->isPublishUp() && $plan->isPublishUp()?->isFuture())
         ) {
             throw new ValidateFailException('Plan is invalid');
         }

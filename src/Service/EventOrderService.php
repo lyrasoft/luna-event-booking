@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lyrasoft\EventBooking\Service;
 
 use Lyrasoft\EventBooking\Entity\EventOrder;
+use Lyrasoft\EventBooking\Enum\EventOrderState;
 use Lyrasoft\EventBooking\EventBookingPackage;
 use Windwalker\Core\Application\ApplicationInterface;
 use Windwalker\DI\Attributes\Service;
@@ -18,14 +19,31 @@ class EventOrderService
 
     public function createNo(EventOrder $order): string
     {
-        $orderNo = $this->eventBooking->config('order.no_handler');
+        $handler = $this->eventBooking->config('order.no_handler');
 
-        if (!$orderNo instanceof \Closure) {
+        if (!$handler instanceof \Closure) {
             throw new \LogicException('Order NO handler is not closure');
         }
 
         return $this->app->call(
-            $orderNo,
+            $handler,
+            [
+                'order' => $order,
+                EventOrder::class => $order,
+            ]
+        );
+    }
+
+    public function getInitialState(EventOrder $order): EventOrderState|string
+    {
+        $handler = $this->eventBooking->config('order.initial_state');
+
+        if (!$handler instanceof \Closure) {
+            return $handler;
+        }
+
+        return $this->app->call(
+            $handler,
             [
                 'order' => $order,
                 EventOrder::class => $order,
