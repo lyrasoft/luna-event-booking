@@ -73,11 +73,15 @@ class EventViewService
             throw new RouteNotFoundException('Event was ended.');
         }
 
-        /** @var Category $category */
-        $category = $this->getCategory($event->getCategoryId());
+        $category = null;
 
-        if ($category && !$category->getState()->isPublished()) {
-            throw new RouteNotFoundException('Category not published.');
+        /** @var ?Category $category */
+        if ($event->getCategoryId()) {
+            $category = $this->getCategory($event->getCategoryId());
+
+            if ($category && !$category->getState()->isPublished()) {
+                throw new RouteNotFoundException('Category not published.');
+            }
         }
 
         return [$event, $category];
