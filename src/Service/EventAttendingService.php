@@ -9,6 +9,7 @@ use Lyrasoft\EventBooking\Data\EventAttendingStore;
 use Lyrasoft\EventBooking\Data\EventOrderTotal;
 use Lyrasoft\EventBooking\Entity\EventPlan;
 use Lyrasoft\EventBooking\Entity\EventStage;
+use Lyrasoft\EventBooking\Exception\InvalidPlanException;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Form\Exception\ValidateFailException;
 use Windwalker\DI\Attributes\Service;
@@ -97,16 +98,17 @@ class EventAttendingService
 
         /** @var EventPlan $plan */
 
-        if (
-            $plan->getStageId() !== $stage->getId()
-            || !$plan->isPublishUp()
-        ) {
-            throw new ValidateFailException('Plan is invalid');
+        if ($plan->getStageId() !== $stage->getId()) {
+            throw new InvalidPlanException('不正確的方案', 404);
+        }
+
+        if (!$plan->isPublishUp()) {
+            throw new InvalidPlanException('不在方案銷售時間內', 403);
         }
 
         // Todo: handle Alternates
         if ($plan->getQuota() < ($plan->getSold() + $qty)) {
-            throw new ValidateFailException('方案：' . $plan->getTitle() . ' 名額已滿');
+            throw new InvalidPlanException('方案：' . $plan->getTitle() . ' 名額已滿', 403);
         }
 
         return $plan;
