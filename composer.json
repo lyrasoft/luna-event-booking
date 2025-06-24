@@ -22,7 +22,7 @@
         "php": ">=8.2",
         "lyrasoft/luna": "^2.1",
         "lyrasoft/sequence": "^1.0",
-        "brick/math": "^0.11.0",
+        "brick/math": "*",
         "chillerlan/php-qrcode": "^5.0"
     },
     "suggest": {
