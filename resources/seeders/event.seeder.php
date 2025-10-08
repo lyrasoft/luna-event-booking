@@ -10,47 +10,38 @@ use Lyrasoft\EventBooking\Entity\EventStage;
 use Lyrasoft\EventBooking\Entity\Venue;
 use Lyrasoft\EventBooking\EventBookingPackage;
 use Lyrasoft\Luna\Entity\Category;
+use Unicorn\Enum\BasicState;
 use Unicorn\Utilities\SlugHelper;
-use Windwalker\Core\Seed\Seeder;
-use Windwalker\Database\DatabaseAdapter;
+use Windwalker\Core\DateTime\Chronos;
+use Windwalker\Core\Seed\AbstractSeeder;
+use Windwalker\Core\Seed\SeedClear;
+use Windwalker\Core\Seed\SeedImport;
 use Windwalker\ORM\EntityMapper;
-use Windwalker\ORM\ORM;
 
-/**
- * Event Seeder
- *
- * @var Seeder          $seeder
- * @var ORM             $orm
- * @var DatabaseAdapter $db
- */
-$seeder->import(
-    static function (
-        EventBookingPackage $eventBooking
-    ) use (
-        $seeder,
-        $orm,
-        $db
-    ) {
-        $faker = $seeder->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
+return new /** Event Seeder */ class extends AbstractSeeder {
+    #[SeedImport]
+    public function import(EventBookingPackage $eventBooking): void
+    {
+        $faker = $this->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
 
         /** @var EntityMapper<Event> $mapper */
-        $mapper = $orm->mapper(Event::class);
+        $mapper = $this->orm->mapper(Event::class);
 
         /** @var EntityMapper<EventStage> $stageMapper */
-        $stageMapper = $orm->mapper(EventStage::class);
+        $stageMapper = $this->orm->mapper(EventStage::class);
 
         /** @var EntityMapper<EventPlan> $planMapper */
-        $planMapper = $orm->mapper(EventPlan::class);
+        $planMapper = $this->orm->mapper(EventPlan::class);
 
-        $categoryIds = $orm->findColumn(Category::class, 'id', ['type' => 'event'])->dump();
-        $venueIds = $orm->findColumn(Venue::class, 'id')->dump();
+        $categoryIds = $this->orm->findColumn(Category::class, 'id', ['type' => 'event'])->dump();
+        $venueIds = $this->orm->findColumn(Venue::class, 'id')->dump();
 
         $createImage = function (int $w = 1200, int $h = 800) use ($faker) {
             return ['url' => $faker->unsplashImage($w, $h)];
         };
 
         foreach (range(1, 30) as $i) {
-            $currentDate = $faker->dateTimeThisYear();
+            $currentDate = Chronos::wrap($faker->dateTimeThisYear());
 
             $item = $mapper->createEntity();
 
@@ -66,7 +57,7 @@ $seeder->import(
             ];
             $item->intro = $faker->sentence(5);
             $item->description = $faker->paragraph(3);
-            $item->state = 1;
+            $item->state = BasicState::PUBLISHED;
 
             $event = $mapper->createOne($item);
 
@@ -86,10 +77,11 @@ $seeder->import(
                 $stage->quota = 20;
                 $stage->alternate = 5;
                 $stage->less = 5;
-                $stage->state = 1;
+                $stage->state = BasicState::PUBLISHED;
                 $stage->ordering = $s;
                 $stage->startDate = $currentDate = $currentDate->modify('+2months');
-                $stage->endDate = $currentDate->modify('+14days');
+                $stage->startDate = Chronos::wrap($stage->startDate);
+                $stage->endDate = Chronos::wrap($currentDate->modify('+14days'));
 
                 $stage = $stageMapper->createOne($stage);
 
@@ -98,8 +90,8 @@ $seeder->import(
                 $plan->eventId = $event->id;
                 $plan->stageId = $stage->id;
                 $plan->title = 'Early Access';
-                $plan->endDate = $stage->startDate->modify('-30days');
-                $plan->state = 1;
+                $plan->endDate = Chronos::wrap($stage->startDate->modify('-30days'));
+                $plan->state = BasicState::PUBLISHED;
                 $plan->quota = 5;
                 $plan->onceMax = 1;
                 $plan->originPrice = 800;
@@ -111,24 +103,24 @@ $seeder->import(
                 $plan->eventId = $event->id;
                 $plan->stageId = $stage->id;
                 $plan->title = 'Basic Ticket';
-                $plan->startDate = $stage->startDate->modify('-30days');
-                $plan->state = 1;
+                $plan->startDate = Chronos::wrap($stage->startDate->modify('-30days'));
+                $plan->state = BasicState::PUBLISHED;
                 $plan->quota = $stage->quota;
                 $plan->onceMax = 1;
                 $plan->price = 800;
 
                 $planMapper->createOne($plan);
 
-                $seeder->outCounting();
+                $this->printCounting();
             }
 
-            $seeder->outCounting();
+            $this->printCounting();
         }
     }
-);
 
-$seeder->clear(
-    static function () use ($seeder, $orm, $db) {
-        $seeder->truncate(Event::class, EventStage::class, EventPlan::class);
+    #[SeedClear]
+    public function clear(): void
+    {
+        $this->truncate(Event::class, EventStage::class, EventPlan::class);
     }
-);
+};

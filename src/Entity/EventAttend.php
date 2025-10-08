@@ -25,6 +25,8 @@ use Windwalker\ORM\EntityInterface;
 use Windwalker\ORM\EntityTrait;
 use Windwalker\ORM\Metadata\EntityMetadata;
 
+// phpcs:disable
+// todo: remove this when phpcs supports 8.4
 #[Table('event_attends', 'event_attend')]
 #[AllowDynamicProperties]
 class EventAttend implements EntityInterface
@@ -86,11 +88,15 @@ class EventAttend implements EntityInterface
 
     #[Column('state')]
     #[Cast(AttendState::class)]
-    public AttendState $state;
+    public AttendState $state {
+        set(AttendState|string $value) => $this->state = AttendState::wrap($value);
+    }
 
     #[Column('checked_in_at')]
     #[CastNullable(ServerTimeCast::class)]
-    public ?Chronos $checkedInAt = null;
+    public ?Chronos $checkedInAt = null {
+        set(\DateTimeInterface|string|null $value) => $this->checkedInAt = Chronos::tryWrap($value);
+    }
 
     #[Column('alternate')]
     #[Cast('bool', 'int')]
@@ -99,12 +105,16 @@ class EventAttend implements EntityInterface
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    public ?Chronos $created = null;
+    public ?Chronos $created = null {
+        set(\DateTimeInterface|string|null $value) => $this->created = Chronos::tryWrap($value);
+    }
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    public ?Chronos $modified = null;
+    public ?Chronos $modified = null {
+        set(\DateTimeInterface|string|null $value) => $this->modified = Chronos::tryWrap($value);
+    }
 
     #[Column('created_by')]
     #[Author]

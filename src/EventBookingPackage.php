@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Lyrasoft\EventBooking;
 
+use Lyrasoft\EventBooking\Entity\Event;
+use Lyrasoft\EventBooking\Entity\EventAttend;
+use Lyrasoft\EventBooking\Entity\EventOrder;
+use Lyrasoft\EventBooking\Entity\EventPlan;
+use Lyrasoft\EventBooking\Entity\EventStage;
+use Lyrasoft\EventBooking\Entity\Venue;
 use Windwalker\Core\Application\ApplicationInterface;
 use Windwalker\Core\Package\AbstractPackage;
 use Windwalker\Core\Package\PackageInstaller;
 use Windwalker\DI\Container;
 use Windwalker\DI\ServiceProviderInterface;
-use Windwalker\Utilities\StrNormalize;
 
 class EventBookingPackage extends AbstractPackage implements ServiceProviderInterface
 {
@@ -46,56 +51,14 @@ class EventBookingPackage extends AbstractPackage implements ServiceProviderInte
         $installer->installSeeders(static::path('resources/seeders/**/*'), 'seeders');
         $installer->installRoutes(static::path('routes/**/*.php'), 'routes');
 
-        $this->installModules($installer, 'event', ['admin', 'model']);
-        $this->installModules($installer, 'event_attend', ['admin', 'model']);
-        $this->installModules($installer, 'event_checkin', ['admin']);
-        $this->installModules($installer, 'event_order', ['front', 'admin', 'model']);
-        $this->installModules($installer, 'event_plan', ['admin', 'model']);
-        $this->installModules($installer, 'event_stage', ['front', 'admin', 'model']);
-        $this->installModules($installer, 'venue', ['admin', 'model']);
-        $this->installModules($installer, 'event_attending', ['front']);
-    }
-
-    protected function installModules(
-        PackageInstaller $installer,
-        string $name,
-        array $modules = ['front', 'admin', 'model']
-    ): void {
-        $pascal = StrNormalize::toPascalCase($name);
-
-        if (in_array('admin', $modules, true)) {
-            $installer->installModules(
-                [
-                    static::path("src/Module/Admin/$pascal/**/*") => "@source/Module/Admin/$pascal",
-                ],
-                ['Lyrasoft\\EventBooking\\Module\\Admin' => 'App\\Module\\Admin'],
-                ['modules', $name . '_admin'],
-            );
-        }
-
-        if (in_array('front', $modules, true)) {
-            $installer->installModules(
-                [
-                    static::path("src/Module/Front/$pascal/**/*") => "@source/Module/Front/$pascal",
-                ],
-                ['Lyrasoft\\EventBooking\\Module\\Front' => 'App\\Module\\Front'],
-                ['modules', $name . '_front']
-            );
-        }
-
-        if (in_array('model', $modules, true)) {
-            $installer->installModules(
-                [
-                    static::path("src/Entity/$pascal.php") => '@source/Entity',
-                    static::path("src/Repository/{$pascal}Repository.php") => '@source/Repository',
-                ],
-                [
-                    'Lyrasoft\\EventBooking\\Entity' => 'App\\Entity',
-                    'Lyrasoft\\EventBooking\\Repository' => 'App\\Repository',
-                ],
-                ['modules', $name . '_model']
-            );
-        }
+        $installer->installMVCModules(Event::class, ['Admin']);
+        $installer->installMVCModules(EventAttend::class, ['Admin']);
+        $installer->installMVCModules('EventCheckin', ['Admin'], false);
+        $installer->installMVCModules(EventOrder::class);
+        $installer->installMVCModules(EventPlan::class, ['Admin']);
+        $installer->installMVCModules(EventStage::class);
+        $installer->installMVCModules(Venue::class, ['Admin']);
+        $installer->installMVCModules('EventAttending', ['Front'], false);
     }
 
     public function config(string $name, ?string $delimiter = '.'): mixed

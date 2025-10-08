@@ -1,17 +1,17 @@
-import '@main';
+import { selectAll, useDisableOnSubmit, useFormValidation } from '@windwalker-io/unicorn-next';
 
 const formSelector = '#attending-form';
 
-u.formValidation().then(() => {
-  u.$ui.disableOnSubmit(formSelector);
+useFormValidation().then(() => {
+  useDisableOnSubmit(formSelector);
 });
 
 // Invoice Inputs
-const carrierInput = u.selectOne<HTMLInputElement>('#input-order-invoice_data-carrier_code')!;
-const invoiceTitleInput = u.selectOne<HTMLInputElement>('#input-order-invoice_data-title')!;
-const invoiceVatInput = u.selectOne<HTMLInputElement>('#input-order-invoice_data-vat')!;
+const carrierInput = document.querySelector<HTMLInputElement>('#input-order-invoice_data-carrier_code')!;
+const invoiceTitleInput = document.querySelector<HTMLInputElement>('#input-order-invoice_data-title')!;
+const invoiceVatInput = document.querySelector<HTMLInputElement>('#input-order-invoice_data-vat')!;
 
-u.selectAll<HTMLInputElement>('[name="order[invoice_type]"]', (radio) => {
+selectAll<HTMLInputElement>('[name="order[invoice_type]"]', (radio) => {
   radio.addEventListener('change', (e) => {
     const v = (e.target as HTMLInputElement).value;
 

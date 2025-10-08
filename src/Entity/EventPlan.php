@@ -27,6 +27,8 @@ use Windwalker\ORM\Event\BeforeCopyEvent;
 use Windwalker\ORM\Metadata\EntityMetadata;
 use Windwalker\Utilities\Str;
 
+// phpcs:disable
+// todo: remove this when phpcs supports 8.4
 #[Table('event_plans', 'event_plan')]
 #[AllowDynamicProperties]
 class EventPlan implements EntityInterface
@@ -54,15 +56,21 @@ class EventPlan implements EntityInterface
     #[Column('state')]
     #[Cast('int')]
     #[Cast(BasicState::class)]
-    public BasicState $state;
+    public BasicState $state {
+        set(BasicState|int $value) => $this->state = BasicState::wrap($value);
+    }
 
     #[Column('start_date')]
     #[CastNullable(ServerTimeCast::class)]
-    public ?Chronos $startDate = null;
+    public ?Chronos $startDate = null {
+        set(\DateTimeInterface|string|null $value) => $this->startDate = Chronos::tryWrap($value);
+    }
 
     #[Column('end_date')]
     #[CastNullable(ServerTimeCast::class)]
-    public ?Chronos $endDate = null;
+    public ?Chronos $endDate = null {
+        set(\DateTimeInterface|string|null $value) => $this->endDate = Chronos::tryWrap($value);
+    }
 
     #[Column('require_validate')]
     #[Cast('bool', 'int')]
@@ -80,12 +88,16 @@ class EventPlan implements EntityInterface
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    public ?Chronos $created = null;
+    public ?Chronos $created = null {
+        set(\DateTimeInterface|string|null $value) => $this->created = Chronos::tryWrap($value);
+    }
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    public ?Chronos $modified = null;
+    public ?Chronos $modified = null {
+        set(\DateTimeInterface|string|null $value) => $this->modified = Chronos::tryWrap($value);
+    }
 
     #[Column('created_by')]
     #[Author]

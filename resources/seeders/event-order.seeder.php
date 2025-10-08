@@ -22,52 +22,41 @@ use Lyrasoft\EventBooking\Service\EventOrderService;
 use Lyrasoft\EventBooking\Service\InvoiceService;
 use Lyrasoft\Luna\Entity\User;
 use Windwalker\Core\Language\LangService;
-use Windwalker\Core\Seed\Seeder;
-use Windwalker\Database\DatabaseAdapter;
+use Windwalker\Core\Seed\AbstractSeeder;
+use Windwalker\Core\Seed\SeedClear;
+use Windwalker\Core\Seed\SeedImport;
 use Windwalker\ORM\EntityMapper;
-use Windwalker\ORM\ORM;
-
 use function Windwalker\collect;
 
-/**
- * EventOrder Seeder
- *
- * @var Seeder          $seeder
- * @var ORM             $orm
- * @var DatabaseAdapter $db
- */
-$seeder->import(
-    static function (
+return new /** EventOrder Seeder */ class extends AbstractSeeder {
+    #[SeedImport]
+    public function import(
         EventOrderService $orderService,
         EventAttendeeService $attendeeService,
         InvoiceService $invoiceService,
         EventBookingPackage $eventBooking,
         LangService $lang,
-    ) use (
-        $seeder,
-        $orm,
-        $db
-    ) {
+    ): void {
         $lang->loadAllFromVendor(EventBookingPackage::class, 'ini');
 
-        $faker = $seeder->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
+        $faker = $this->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
 
-        $userIds = $orm->findColumn(User::class, 'id')->dump();
-        $events = $orm->findList(Event::class)
+        $userIds = $this->orm->findColumn(User::class, 'id')->dump();
+        $events = $this->orm->findList(Event::class)
             ->all()
             ->keyBy('id')
             ->dump();
 
-        $stages = $orm->findList(EventStage::class)
+        $stages = $this->orm->findList(EventStage::class)
             ->all()
             ->dump();
 
-        $planGroup = $orm->findList(EventPlan::class)
+        $planGroup = $this->orm->findList(EventPlan::class)
             ->all()
             ->groupBy('stageId');
 
         /** @var EntityMapper<EventOrder> $mapper */
-        $mapper = $orm->mapper(EventOrder::class);
+        $mapper = $this->orm->mapper(EventOrder::class);
 
         /** @var EventStage $stage */
         foreach ($stages as $stage) {
@@ -137,7 +126,7 @@ $seeder->import(
             $item->state = EventOrderState::DONE;
             $item->histories
                 ->push(
-                    (new EventOrderHistory())
+                    new EventOrderHistory()
                         ->setState(EventOrderState::UNPAID)
                         ->setStateText(EventOrderState::UNPAID->getTitle($lang))
                         ->setType(OrderHistoryType::SYSTEM)
@@ -157,18 +146,18 @@ $seeder->import(
                 $attend->orderId = $item->id;
                 $attend->no = $attendeeService->createNo($item, $attend);
 
-                $orm->createOne($attend);
+                $this->orm->createOne($attend);
 
-                $seeder->outCounting();
+                $this->printCounting();
             }
 
-            $seeder->outCounting();
+            $this->printCounting();
         }
     }
-);
 
-$seeder->clear(
-    static function () use ($seeder, $orm, $db) {
-        $seeder->truncate(EventOrder::class, EventAttend::class);
+    #[SeedClear]
+    public function clear(): void
+    {
+        $this->truncate(EventOrder::class, EventAttend::class);
     }
-);
+};

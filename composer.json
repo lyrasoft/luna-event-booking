@@ -19,8 +19,8 @@
     ],
     "minimum-stability": "beta",
     "require": {
-        "php": ">=8.2",
-        "lyrasoft/luna": "^2.1",
+        "php": ">=8.4.6",
+        "lyrasoft/luna": "^2.2",
         "lyrasoft/sequence": "^1.0",
         "brick/math": "*",
         "chillerlan/php-qrcode": "^5.0"

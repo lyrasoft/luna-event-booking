@@ -6,30 +6,19 @@ namespace App\Seeder;
 
 use Lyrasoft\EventBooking\Entity\Venue;
 use Lyrasoft\EventBooking\EventBookingPackage;
-use Windwalker\Core\Seed\Seeder;
-use Windwalker\Database\DatabaseAdapter;
+use Windwalker\Core\Seed\AbstractSeeder;
+use Windwalker\Core\Seed\SeedClear;
+use Windwalker\Core\Seed\SeedImport;
 use Windwalker\ORM\EntityMapper;
-use Windwalker\ORM\ORM;
 
-/**
- * Venue Seeder
- *
- * @var Seeder          $seeder
- * @var ORM             $orm
- * @var DatabaseAdapter $db
- */
-$seeder->import(
-    static function (
-        EventBookingPackage $eventBooking
-    ) use (
-        $seeder,
-        $orm,
-        $db
-    ) {
-        $faker = $seeder->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
+return new /** Venue Seeder */ class extends AbstractSeeder {
+    #[SeedImport]
+    public function import(EventBookingPackage $eventBooking): void
+    {
+        $faker = $this->faker($eventBooking->config('fixtures.locale') ?: 'en_US');
 
         /** @var EntityMapper<Venue> $mapper */
-        $mapper = $orm->mapper(Venue::class);
+        $mapper = $this->orm->mapper(Venue::class);
 
         foreach (range(1, 7) as $i) {
             $item = $mapper->createEntity();
@@ -54,13 +43,13 @@ $seeder->import(
 
             $mapper->createOne($item);
 
-            $seeder->outCounting();
+            $this->printCounting();
         }
     }
-);
 
-$seeder->clear(
-    static function () use ($seeder, $orm, $db) {
-        $seeder->truncate(Venue::class);
+    #[SeedClear]
+    public function clear(): void
+    {
+        $this->truncate(Venue::class);
     }
-);
+};

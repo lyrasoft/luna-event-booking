@@ -1,7 +1,5 @@
-import '@main';
+import { useDisableOnSubmit, useFormValidation } from '@windwalker-io/unicorn-next';
 
 const formSelector = '#attend-form';
 
-u.formValidation().then(() => {
-  u.$ui.disableOnSubmit(formSelector);
-});
+useFormValidation().then(() => useDisableOnSubmit(formSelector));
