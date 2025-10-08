@@ -47,7 +47,7 @@ use Windwalker\Core\Router\SystemUri;
                     $event = $vm->tryEntity(Event::class, $item->event);
                     $stage = $vm->tryEntity(EventStage::class, $item->stage);
                     $venue = $vm->tryEntity(Venue::class, $item->venue);
-                    $link = $nav->to('my_event_item')->var('no', $item->getNo())
+                    $link = $nav->to('my_event_item')->var('no', $item->no)
                 @endphp
                 <x-card class="mb-4">
                     <div class="mb-2">
@@ -69,7 +69,7 @@ use Windwalker\Core\Router\SystemUri;
 
                         <div>
                             <i class="far fa-user"></i>
-                            {{ $item->getAttends() }}
+                            {{ $item->attends }}
                         </div>
                     </div>
 

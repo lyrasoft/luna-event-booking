@@ -33,75 +33,75 @@ class Event implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('category_id')]
-    protected int $categoryId = 0;
+    public int $categoryId = 0;
 
     #[Column('last_stage_id')]
-    protected int $lastStageId = 0;
+    public int $lastStageId = 0;
 
     #[Column('title')]
-    protected string $title = '';
+    public string $title = '';
 
     #[Column('alias')]
     #[Slugify]
-    protected string $alias = '';
+    public string $alias = '';
 
     #[Column('subtitle')]
-    protected string $subtitle = '';
+    public string $subtitle = '';
 
     #[Column('cover')]
-    protected string $cover = '';
+    public string $cover = '';
 
     #[Column('images')]
     #[Cast(JsonCast::class)]
-    protected array $images = [];
+    public array $images = [];
 
     #[Column('intro')]
-    protected string $intro = '';
+    public string $intro = '';
 
     #[Column('description')]
-    protected string $description = '';
+    public string $description = '';
 
     #[Column('state')]
     #[Cast('int')]
     #[Cast(BasicState::class)]
-    protected BasicState $state;
+    public BasicState $state;
 
     #[Column('publish_up')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $publishUp = null;
+    public ?Chronos $publishUp = null;
 
     #[Column('start_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $startDate = null;
+    public ?Chronos $startDate = null;
 
     #[Column('end_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $endDate = null;
+    public ?Chronos $endDate = null;
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null;
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null;
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void

@@ -16,6 +16,6 @@ trait PaymentTrait
 
     public function getTaskEndpoint(EventOrder $order): RouteUri
     {
-        return $this->nav->to('event_payment_task')->id($order->getId())->full();
+        return $this->nav->to('event_payment_task')->id($order->id)->full();
     }
 }

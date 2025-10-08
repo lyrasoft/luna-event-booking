@@ -56,7 +56,7 @@ class EventAttendingController
             return $app->getNav()->back();
         }
 
-        return $app->getNav()->to('event_attending')->var('stageId', $stage->getId());
+        return $app->getNav()->to('event_attending')->var('stageId', $stage->id);
     }
 
     public function checkout(
@@ -77,7 +77,7 @@ class EventAttendingController
         [$event, $stage] = $eventViewService->checkStageAvailableById((int) $stageId);
 
         // Save to session
-        $data = $eventAttendingService->getAttendingDataFromSession($stage->getId());
+        $data = $eventAttendingService->getAttendingDataFromSession($stage->id);
 
         if ($data === null) {
             return response()->redirect($app->getSystemUri()->root());
@@ -86,7 +86,7 @@ class EventAttendingController
         $data['order'] = $order;
         $data['attends'] = $attends;
 
-        $eventAttendingService->rememberAttendingData($stage->getId(), $data);
+        $eventAttendingService->rememberAttendingData($stage->id, $data);
 
         /** @var EventAttendingStore $store */
         $store = $orm->transaction(
@@ -98,7 +98,7 @@ class EventAttendingController
                 $eventAttendingService,
                 $eventCheckoutService
             ) {
-                $store = $eventAttendingService->getAttendingStore($stage->getId(), true);
+                $store = $eventAttendingService->getAttendingStore($stage->id, true);
 
                 $stage = $store->getStage();
 
@@ -110,25 +110,25 @@ class EventAttendingController
                 $order = new EventOrder();
 
                 if ($user->isLogin()) {
-                    $order->setUserId((int) $user->getId());
+                    $order->userId = (int) $user->id;
                 }
 
-                $order->setEventId($event->getId());
-                $order->setStageId($stage->getId());
-                $order->setInvoiceType($orderData['invoice_type']);
-                $order->setInvoiceData($orderData['invoice_data']);
-                $order->setTotal($store->getGrandTotal()->toFloat());
-                $order->setTotals(clone $store->getTotals());
-                $order->setName($orderData['name'] ?? '');
-                $order->setEmail($orderData['email'] ?? '');
-                $order->setNick($orderData['nick'] ?? '');
-                $order->setMobile($orderData['mobile'] ?? '');
-                $order->setPhone($orderData['phone'] ?? '');
-                $order->setAddress($orderData['address'] ?? '');
-                $order->setDetails($orderData['details'] ?? []);
-                $order->setPayment('atm');
-                $order->setScreenshots(compact('event', 'stage'));
-                $order->setAttends(count($store->getAllAttends()));
+                $order->eventId = $event->id;
+                $order->stageId = $stage->id;
+                $order->invoiceType = $orderData['invoice_type'];
+                $order->invoiceData = $orderData['invoice_data'];
+                $order->total = $store->getGrandTotal()->toFloat();
+                $order->totals = clone $store->getTotals();
+                $order->name = $orderData['name'] ?? '';
+                $order->email = $orderData['email'] ?? '';
+                $order->nick = $orderData['nick'] ?? '';
+                $order->mobile = $orderData['mobile'] ?? '';
+                $order->phone = $orderData['phone'] ?? '';
+                $order->address = $orderData['address'] ?? '';
+                $order->details = $orderData['details'] ?? [];
+                $order->payment = 'atm';
+                $order->screenshots = compact('event', 'stage');
+                $order->attends = count($store->getAllAttends());
 
                 $store->setOrder($order);
 
@@ -140,23 +140,21 @@ class EventAttendingController
 
                     foreach ($attends as $attendData) {
                         $attend = new EventAttend();
-                        $attend->setEventId($event->getId());
-                        $attend->setStageId($stage->getId());
-                        $attend->setPlanId($plan->getId());
-                        $attend->setPlanTitle($plan->getTitle());
-                        $attend->setPrice($plan->getPrice());
-                        $attend->setName($attendData['name'] ?? '');
-                        $attend->setEmail($attendData['email'] ?? '');
-                        $attend->setNick($attendData['nick'] ?? '');
-                        $attend->setMobile($attendData['mobile'] ?? '');
-                        $attend->setPhone($attendData['phone'] ?? '');
-                        $attend->setAddress($attendData['address'] ?? '');
-                        $attend->setDetails($attendData['details'] ?? []);
-                        $attend->setScreenshots(
-                            [
-                                'plan' => $plan,
-                            ]
-                        );
+                        $attend->eventId = $event->id;
+                        $attend->stageId = $stage->id;
+                        $attend->planId = $plan->id;
+                        $attend->planTitle = $plan->title;
+                        $attend->price = $plan->price;
+                        $attend->name = $attendData['name'] ?? '';
+                        $attend->email = $attendData['email'] ?? '';
+                        $attend->nick = $attendData['nick'] ?? '';
+                        $attend->mobile = $attendData['mobile'] ?? '';
+                        $attend->phone = $attendData['phone'] ?? '';
+                        $attend->address = $attendData['address'] ?? '';
+                        $attend->details = $attendData['details'] ?? [];
+                        $attend->screenshots = [
+                            'plan' => $plan,
+                        ];
 
                         $attendEntities[] = $attend;
                     }
@@ -173,7 +171,7 @@ class EventAttendingController
         // Todo: Event
 
         $order = $store->getOrder();
-        $orderUri = $app->getNav()->to('event_order_item')->var('no', $order->getNo());
+        $orderUri = $app->getNav()->to('event_order_item')->var('no', $order->no);
 
         try {
             $result = $eventCheckoutService->processPayment($store);
@@ -197,7 +195,7 @@ class EventAttendingController
             return 'Order not found';
         }
 
-        $gateway = $paymentService->getGateway($order->getPayment());
+        $gateway = $paymentService->getGateway($order->payment);
 
         if ($gateway) {
             return 'Gateway not found.';

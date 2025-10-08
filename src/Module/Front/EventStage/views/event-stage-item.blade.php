@@ -47,24 +47,24 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
         <section class="l-event-stage-body mt-5">
             <div class="mx-auto d-flex flex-column gap-4" style="max-width: 800px;">
                 <div class="text-center">
-                    <img src="{{ $item->getCover() }}" class="img-fluid" style="max-width: 800px" alt="cover">
+                    <img src="{{ $item->cover }}" class="img-fluid" style="max-width: 800px" alt="cover">
                 </div>
 
                 <header class="l-event-stage-header">
-                    <h2>{{ $event->getTitle() }} | {{ $item->getTitle() }}</h2>
+                    <h2>{{ $event->title }} | {{ $item->title }}</h2>
                 </header>
 
                 <aside>
                     <div class="d-flex align-items-center gap-3 mb-2">
-                        @if ($item->getStartDate())
+                        @if ($item->startDate)
                             <div>
-                                開始: {{ $chronos->toLocalFormat($item->getStartDate(), 'Y/m/d H:i') }}
+                                開始: {{ $chronos->toLocalFormat($item->startDate, 'Y/m/d H:i') }}
                             </div>
                         @endif
 
-                        @if ($item->getEndDate())
+                        @if ($item->endDate)
                             <div>
-                                結束: {{ $chronos->toLocalFormat($item->getEndDate(), 'Y/m/d H:i') }}
+                                結束: {{ $chronos->toLocalFormat($item->endDate, 'Y/m/d H:i') }}
                             </div>
                         @endif
                     </div>
@@ -72,15 +72,15 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <div>
                             <i class="far fa-user"></i>
-                            {{ $item->getQuota() }}
+                            {{ $item->quota }}
                         </div>
 
                         @if ($category)
                             <div>
-                                <a href="{{ $nav->to('event_stage_list')->var('path', $category->getPath()) }}"
+                                <a href="{{ $nav->to('event_stage_list')->var('path', $category->path) }}"
                                     class="link-secondary">
                                     <i class="far fa-folder"></i>
-                                    {{ $category->getTitle() }}
+                                    {{ $category->title }}
                                 </a>
                             </div>
                         @endif
@@ -88,18 +88,18 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                 </aside>
 
                 <div>
-                    {!! $event->getDescription() !!}
+                    {!! $event->description !!}
                 </div>
 
                 <div>
-                    {!! $item->getDescription() !!}
+                    {!! $item->description !!}
                 </div>
 
                 @php
                     $canAttend = false;
                 @endphp
 
-                <form id="attend-form" action="{{ $nav->to('event_attending_save')->var('stageId', $item->getId()) }}"
+                <form id="attend-form" action="{{ $nav->to('event_attending_save')->var('stageId', $item->id) }}"
                     method="post">
                     <table class="table table-striped">
                         <thead>
@@ -115,11 +115,11 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                             @php
                                 $sale = true;
 
-                                if ($plan->getStartDate() && $plan->getStartDate()->isFuture()) {
+                                if ($plan->startDate && $plan->startDate->isFuture()) {
                                     $sale = false;
                                 }
 
-                                if ($plan->getEndDate() && $plan->getEndDate()->isPast()) {
+                                if ($plan->endDate && $plan->endDate->isPast()) {
                                     $sale = false;
                                 }
 
@@ -127,7 +127,7 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                             @endphp
                             <tr>
                                 <td>
-                                    <div class="fs-5">{{ $plan->getTitle() }}</div>
+                                    <div class="fs-5">{{ $plan->title }}</div>
                                 </td>
                                 <td>
                                     @if ($sale)
@@ -136,12 +136,12 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                                             銷售中
                                         </div>
                                     @else
-                                        @if ($plan->getStartDate() && $plan->getStartDate()->isFuture())
+                                        @if ($plan->startDate && $plan->startDate->isFuture())
                                             <div>
                                                 <i class="far fa-fw fa-clock"></i>
                                                 尚未開賣
                                             </div>
-                                        @elseif ($plan->getEndDate() && $plan->getEndDate()->isPast())
+                                        @elseif ($plan->endDate && $plan->endDate->isPast())
                                             <div>
                                                 <i class="far fa-fw fa-stop"></i>
                                                 結束販售
@@ -151,29 +151,29 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                                 </td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-2">
-                                        @if ($plan->getOriginPrice())
+                                        @if ($plan->originPrice)
                                             <del class="text-muted">
-                                                {{ $priceFormatter->format($plan->getOriginPrice()) }}
+                                                {{ $priceFormatter->format($plan->originPrice) }}
                                             </del>
                                         @endif
 
                                         <div class="fs-5">
-                                            @if (!$plan->getPrice())
+                                            @if (!$plan->price)
                                                 免費
                                             @else
-                                                {{ $priceFormatter->format($plan->getPrice()) }}
+                                                {{ $priceFormatter->format($plan->price) }}
                                             @endif
                                         </div>
                                     </div>
                                 </td>
                                 <td class="text-end">
                                     @if ($sale)
-                                        <select name="quantity[{{ $plan->getId() }}]"
-                                            id="input-quantity-{{ $plan->getId() }}"
+                                        <select name="quantity[{{ $plan->id }}]"
+                                            id="input-quantity-{{ $plan->id }}"
                                             class="form-select ms-auto"
                                         >
                                             <option value="">- 選擇人數 -</option>
-                                            @foreach (range(1, $plan->getOnceMax()) as $n)
+                                            @foreach (range(1, $plan->onceMax) as $n)
                                                 <option value="{{ $n }}">
                                                     {{ $n }}
                                                 </option>

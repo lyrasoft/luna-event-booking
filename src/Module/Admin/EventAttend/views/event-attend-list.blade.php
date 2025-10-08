@@ -145,7 +145,7 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
                     <tr>
                         {{-- Checkbox --}}
                         <td>
-                            <x-row-checkbox :row="$i" :id="$item->getId()"></x-row-checkbox>
+                            <x-row-checkbox :row="$i" :id="$item->id"></x-row-checkbox>
                         </td>
 
                         {{-- State --}}
@@ -153,7 +153,7 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
                             <x-state-dropdown color-on="text"
                                 button-style="width: 100%"
                                 :workflow="$workflow"
-                                :id="$item->getId()"
+                                :id="$item->id"
                                 :value="$item->state"
                             ></x-state-dropdown>
                         </td>
@@ -162,10 +162,10 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
                             {{-- Event --}}
                             <td>
                                 <div>
-                                    {{ $event->getTitle() }}
+                                    {{ $event->title }}
                                 </div>
                                 <div class="text-muted small mt-1">
-                                    {{ $stage->getTitle() }}
+                                    {{ $stage->title }}
                                 </div>
                             </td>
                         @endif
@@ -173,47 +173,47 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
                         {{-- Name --}}
                         <td>
                             <div>
-                                <a href="{{ $nav->to('event_attend_edit')->id($item->getId()) }}">
-                                    {{ $item->getName() }}
+                                <a href="{{ $nav->to('event_attend_edit')->id($item->id) }}">
+                                    {{ $item->name }}
                                 </a>
                             </div>
 
                             <div class="small text-secondary">
-                                {{ $item->getNick() }}
+                                {{ $item->nick }}
                             </div>
                         </td>
 
                         {{-- Order No --}}
                         <td>
-                            #{{ $order->getNo() }}
+                            #{{ $order->no }}
                         </td>
 
                         {{-- Plan --}}
                         <td>
-                            {{ $item->getPlanTitle() }}
+                            {{ $item->planTitle }}
                         </td>
 
                         {{-- Contact --}}
                         <td>
-                            @if ($item->getEmail())
+                            @if ($item->email)
                                 <div class="mb-1">
                                     <i class="far fa-fw fa-envelope"></i>
-                                    {{ $item->getEmail() }}
+                                    {{ $item->email }}
                                 </div>
                             @endif
-                            @if ($item->getMobile())
+                            @if ($item->mobile)
                                 <div class="mb-1">
                                     <i class="far fa-fw fa-mobile"></i>
-                                    {{ $item->getMobile() }}
+                                    {{ $item->mobile }}
                                 </div>
                             @endif
 
-                            @if ($item->getPhone())
+                            @if ($item->phone)
                                 <div>
                                     <i class="far fa-fw fa-phone"></i>
-                                    {{ $item->getPhone() }}
+                                    {{ $item->phone }}
                                 </div>
-                            @endif
+                                @endif
                         </td>
 
                         {{-- Alt --}}
@@ -226,15 +226,15 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
                         </td>
 
                         <td>
-                            @if ($item->getState() === AttendState::BOOKED)
+                            @if ($item->state === AttendState::BOOKED)
                                 <button type="button" class="btn btn-sm btn-outline-success"
                                     style="width: 100px"
-                                    @click="$store.grid.updateItem('{{ $item->getId()}}', null, { batch: { 'state': 'checked_in' } })"
+                                    @click="$store.grid.updateItem('{{ $item->id}}', null, { batch: { 'state': 'checked_in' } })"
                                 >
                                     <i class="far fa-sign-in"></i>
                                     簽到
                                 </button>
-                            @elseif($item->getState() === AttendState::CHECKED_IN)
+                            @elseif($item->state === AttendState::CHECKED_IN)
                                 <button type="button" class="btn btn-sm btn-success"
                                     style="width: 100px"
                                     disabled>
@@ -256,7 +256,7 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
 
                         {{-- ID --}}
                         <td class="text-end">
-                            {{ $item->getId() }}
+                            {{ $item->id }}
                         </td>
                     </tr>
                 @empty

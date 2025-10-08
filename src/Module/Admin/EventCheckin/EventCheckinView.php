@@ -43,7 +43,7 @@ class EventCheckinView implements ViewModelInterface
 
         $attend = $this->orm->mustFindOne(EventAttend::class, compact('no'));
 
-        if ($attend->getState() !== AttendState::CHECKED_IN) {
+        if ($attend->state !== AttendState::CHECKED_IN) {
             throw new RouteNotFoundException();
         }
 

@@ -46,34 +46,34 @@ use Windwalker\Core\Router\SystemUri;
                 @php
                     $event = $vm->tryEntity(Event::class, $item->event);
                     $stage = $vm->tryEntity(EventStage::class, $item->stage);
-                    $link = $nav->to('event_order_item')->var('no', $item->getNo())
+                    $link = $nav->to('event_order_item')->var('no', $item->no)
                 @endphp
                 <x-card class="mb-4">
                     <div class="card-title text-muted d-flex flex-items-center gap-3">
                         <a href="{{ $link }}">
-                            #{{ $item->getNo() }}
+                            #{{ $item->no }}
                         </a>
 
                         <div>
                             <i class="far fa-clock"></i>
-                            {{ $chronos->toLocalFormat($item->getCreated(), 'Y/m/d H:i') }}
+                            {{ $chronos->toLocalFormat($item->created, 'Y/m/d H:i') }}
                         </div>
 
                         <div>
                             <i class="far fa-user"></i>
-                            {{ $item->getAttends() }}
+                            {{ $item->attends }}
                         </div>
                     </div>
 
                     <h4>
-                        {{ $event?->getTitle() }} | {{ $stage?->getTitle() }}
+                        {{ $event?->title }} | {{ $stage?->title }}
                     </h4>
 
                     <div class="mt-3 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-3">
                             <div>
-                            <span class="badge bg-{{ $item->getState()->getColor() }} fs-5">
-                                {{ $item->getState()->getTitle($lang) }}
+                            <span class="badge bg-{{ $item->state->getColor() }} fs-5">
+                                {{ $item->state->getTitle($lang) }}
                             </span>
                             </div>
                         </div>

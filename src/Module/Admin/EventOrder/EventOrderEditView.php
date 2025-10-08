@@ -54,14 +54,14 @@ class EventOrderEditView implements ViewModelInterface
         /** @var EventOrder $item */
         $item = $this->repository->mustGetItem($id);
 
-        $stage = $this->orm->mustFindOne(EventStage::class, $item->getStageId());
+        $stage = $this->orm->mustFindOne(EventStage::class, $item->stageId);
 
         $attends = $this->orm->from(EventAttend::class)
             ->leftJoin(
                 EventPlan::class,
                 'plan'
             )
-            ->where('event_attend.order_id', $item->getId())
+            ->where('event_attend.order_id', $item->id)
             ->groupByJoins()
             ->all(EventAttend::class);
 

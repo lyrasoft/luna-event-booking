@@ -40,14 +40,14 @@ use Windwalker\Form\Form;
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
 
-$alert = $item->getParams()['alert'] ?? [];
+$alert = $item->params['alert'] ?? [];
 
-$screenshots = $item->getScreenshots();
+$screenshots = $item->screenshots;
 
 $event = $vm->tryEntity(Event::class, $screenshots['event']);
 $stage = $vm->tryEntity(EventStage::class, $screenshots['stage']);
 
-$histories = $item->getHistories();
+$histories = $item->histories;
 ?>
 
 @extends('admin.global.body-edit')
@@ -99,7 +99,7 @@ $histories = $item->getHistories();
 
                 <div class="card-body">
                     @php
-                        $totals = $item->getTotals();
+                        $totals = $item->totals;
                     @endphp
 
                     @foreach ($totals as $total)

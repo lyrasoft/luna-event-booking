@@ -34,70 +34,70 @@ class EventPlan implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('event_id')]
-    protected int $eventId = 0;
+    public int $eventId = 0;
 
     #[Column('stage_id')]
-    protected int $stageId = 0;
+    public int $stageId = 0;
 
     #[Column('title')]
-    protected string $title = '';
+    public string $title = '';
 
     #[Column('price')]
-    protected float $price = 0.0;
+    public float $price = 0.0;
 
     #[Column('origin_price')]
-    protected ?float $originPrice = null;
+    public ?float $originPrice = null;
 
     #[Column('state')]
     #[Cast('int')]
     #[Cast(BasicState::class)]
-    protected BasicState $state;
+    public BasicState $state;
 
     #[Column('start_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $startDate = null;
+    public ?Chronos $startDate = null;
 
     #[Column('end_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $endDate = null;
+    public ?Chronos $endDate = null;
 
     #[Column('require_validate')]
     #[Cast('bool', 'int')]
-    protected bool $requireValidate = false;
+    public bool $requireValidate = false;
 
     #[Column('quota')]
-    protected int $quota = 0;
+    public int $quota = 0;
 
     #[Column('sold')]
-    protected int $sold = 0;
+    public int $sold = 0;
 
     #[Column('once_max')]
-    protected int $onceMax = 0;
+    public int $onceMax = 0;
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null;
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null;
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void
@@ -338,15 +338,15 @@ class EventPlan implements EntityInterface
 
     public function isPublishUp(): bool
     {
-        if ($this->getState()->isUnpublished()) {
+        if ($this->state->isUnpublished()) {
             return false;
         }
 
-        if ($this->getStartDate() && $this->getStartDate()->isFuture()) {
+        if ($this->startDate && $this->startDate->isFuture()) {
             return false;
         }
 
-        if ($this->getEndDate() && $this->getEndDate()->isPast()) {
+        if ($this->endDate && $this->endDate->isPast()) {
             return false;
         }
 

@@ -35,7 +35,7 @@ $attributes->props(
     'attend'
 );
 
-$link = $nav->to('admin::event_checkin')->var('attendNo', $attend->getNo())->full();
+$link = $nav->to('admin::event_checkin')->var('attendNo', $attend->no)->full();
 
 $qrcode = (new QRCode())->render((string) $link);
 ?>
@@ -44,7 +44,7 @@ $qrcode = (new QRCode())->render((string) $link);
     <div class="card bg-light">
         <div class="card-body">
             <div class="card-title mb-3">
-                報名編號: <strong>#{{ $attend->getNo() }}</strong>
+                報名編號: <strong>#{{ $attend->no }}</strong>
             </div>
 
             <div class="row">
@@ -55,20 +55,20 @@ $qrcode = (new QRCode())->render((string) $link);
                         <tr>
                             <td style="width: 100px">姓名</td>
                             <td>
-                                {{ $attend->getName() }}
-                                @if ($attend->getNick())
-                                    ({{ $attend->getNick() }})
+                                {{ $attend->name }}
+                                @if ($attend->nick)
+                                    ({{ $attend->nick }})
                                 @endif
                             </td>
 
                         </tr>
                         <tr>
                             <th>Email</th>
-                            <td>{{ $attend->getEmail() }}</td>
+                            <td>{{ $attend->email }}</td>
                         </tr>
                         <tr>
                             <th>手機</th>
-                            <td>{{ $attend->getMobile() }}</td>
+                            <td>{{ $attend->mobile }}</td>
                         </tr>
                         </tbody>
                     </table>

@@ -122,7 +122,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                     <tr>
                         {{-- Checkbox --}}
                         <td>
-                            <x-row-checkbox :row="$i" :id="$item->getId()"></x-row-checkbox>
+                            <x-row-checkbox :row="$i" :id="$item->id"></x-row-checkbox>
                         </td>
 
                         {{-- State --}}
@@ -131,15 +131,15 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                 button-style="width: 100%"
                                 use-states
                                 :workflow="$workflow"
-                                :id="$item->getId()"
+                                :id="$item->id"
                                 :value="$item->state"
                             ></x-state-dropdown>
                         </td>
 
                         {{-- Cover --}}
                         <td>
-                            @if ($item->getImage())
-                                <img src="{{ $item->getImage() }}"
+                            @if ($item->image)
+                                <img src="{{ $item->image }}"
                                     class="rounded"
                                     style="width: 48px; aspect-ratio: 4/3; object-fit: cover"
                                     alt="cover">
@@ -149,8 +149,8 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         {{-- Title --}}
                         <td>
                             <div>
-                                <a href="{{ $nav->to('venue_edit')->id($item->getId()) }}">
-                                    {{ $item->getTitle() }}
+                                <a href="{{ $nav->to('venue_edit')->id($item->id) }}">
+                                    {{ $item->title }}
                                 </a>
                             </div>
                         </td>
@@ -158,14 +158,14 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         {{-- Position --}}
                         <td>
                             <div class="small">
-                                {{ $item->getAddress() }}
+                                {{ $item->address }}
                             </div>
                         </td>
 
                         {{-- Website --}}
                         <td>
-                            @if ($item->getMapUrl())
-                                <a href="{{ $item->getMapUrl() }}" target="_blank"
+                            @if ($item->mapUrl)
+                                <a href="{{ $item->mapUrl }}" target="_blank"
                                     class="btn btn-sm btn-outline-danger">
                                     <i class="far fa-location-dot"></i>
                                     觀看
@@ -175,8 +175,8 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                         {{-- Website --}}
                         <td>
-                            @if ($item->getUrl())
-                                <a href="{{ $item->getUrl() }}" target="_blank"
+                            @if ($item->url)
+                                <a href="{{ $item->url }}" target="_blank"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="far fa-external-link"></i>
                                     前往
@@ -192,7 +192,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         {{-- Delete --}}
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-outline-secondary"
-                                @click="grid.deleteItem('{{ $item->getId() }}')"
+                                @click="grid.deleteItem('{{ $item->id }}')"
                                 data-dos
                             >
                                 <i class="fa-solid fa-trash"></i>
@@ -201,7 +201,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                         {{-- ID --}}
                         <td class="text-end">
-                            {{ $item->getId() }}
+                            {{ $item->id }}
                         </td>
                     </tr>
                 @empty

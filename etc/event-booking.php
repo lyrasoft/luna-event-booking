@@ -68,7 +68,7 @@ return [
         'payment' => [
             'no_handler' => function (EventOrder $order) {
                 // Max length: 20
-                $no = 'P' . str_pad((string) $order->getId(), 13, '0', STR_PAD_LEFT);
+                $no = 'P' . str_pad((string) $order->id, 13, '0', STR_PAD_LEFT);
 
                 if (WINDWALKER_DEBUG) {
                     $no .= 'T' . BaseConvert::encode(time(), BaseConvert::BASE62);

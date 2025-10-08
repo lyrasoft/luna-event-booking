@@ -32,91 +32,91 @@ class EventAttend implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('order_id')]
-    protected int $orderId = 0;
+    public int $orderId = 0;
 
     #[Column('user_id')]
-    protected int $userId = 0;
+    public int $userId = 0;
 
     #[Column('event_id')]
-    protected int $eventId = 0;
+    public int $eventId = 0;
 
     #[Column('stage_id')]
-    protected int $stageId = 0;
+    public int $stageId = 0;
 
     #[Column('plan_id')]
-    protected int $planId = 0;
+    public int $planId = 0;
 
     #[Column('plan_title')]
-    protected string $planTitle = '';
+    public string $planTitle = '';
 
     #[Column('no')]
-    protected string $no = '';
+    public string $no = '';
 
     #[Column('price')]
-    protected float $price = 0.0;
+    public float $price = 0.0;
 
     #[Column('name')]
-    protected string $name = '';
+    public string $name = '';
 
     #[Column('email')]
-    protected string $email = '';
+    public string $email = '';
 
     #[Column('nick')]
-    protected string $nick = '';
+    public string $nick = '';
 
     #[Column('mobile')]
-    protected string $mobile = '';
+    public string $mobile = '';
 
     #[Column('phone')]
-    protected string $phone = '';
+    public string $phone = '';
 
     #[Column('address')]
-    protected string $address = '';
+    public string $address = '';
 
     #[Column('details')]
     #[Cast(JsonCast::class)]
-    protected array $details = [];
+    public array $details = [];
 
     #[Column('screenshots')]
     #[Cast(JsonCast::class)]
-    protected array $screenshots = [];
+    public array $screenshots = [];
 
     #[Column('state')]
     #[Cast(AttendState::class)]
-    protected AttendState $state;
+    public AttendState $state;
 
     #[Column('checked_in_at')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $checkedInAt = null;
+    public ?Chronos $checkedInAt = null;
 
     #[Column('alternate')]
     #[Cast('bool', 'int')]
-    protected bool $alternate = false;
+    public bool $alternate = false;
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null;
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null;
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void

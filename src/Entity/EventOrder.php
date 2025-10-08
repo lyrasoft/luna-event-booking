@@ -37,121 +37,121 @@ class EventOrder implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('user_id')]
-    protected int $userId = 0;
+    public int $userId = 0;
 
     #[Column('event_id')]
-    protected int $eventId = 0;
+    public int $eventId = 0;
 
     #[Column('stage_id')]
-    protected int $stageId = 0;
+    public int $stageId = 0;
 
     #[Column('no')]
-    protected string $no = '';
+    public string $no = '';
 
     #[Column('transaction_no')]
-    protected string $transactionNo = '';
+    public string $transactionNo = '';
 
     #[Column('invoice_type')]
     #[Cast(InvoiceType::class)]
-    protected InvoiceType $invoiceType;
+    public InvoiceType $invoiceType;
 
     #[Column('invoice_data')]
     #[Cast(JsonCast::class)]
     #[Cast(InvoiceData::class)]
-    protected InvoiceData $invoiceData;
+    public InvoiceData $invoiceData;
 
     #[Column('total')]
-    protected float $total = 0.0;
+    public float $total = 0.0;
 
     #[Column('totals')]
     #[Cast(JsonCast::class)]
     #[Cast(EventOrderTotals::class)]
-    protected EventOrderTotals $totals;
+    public EventOrderTotals $totals;
 
     #[Column('name')]
-    protected string $name = '';
+    public string $name = '';
 
     #[Column('email')]
-    protected string $email = '';
+    public string $email = '';
 
     #[Column('nick')]
-    protected string $nick = '';
+    public string $nick = '';
 
     #[Column('mobile')]
-    protected string $mobile = '';
+    public string $mobile = '';
 
     #[Column('phone')]
-    protected string $phone = '';
+    public string $phone = '';
 
     #[Column('address')]
-    protected string $address = '';
+    public string $address = '';
 
     #[Column('details')]
     #[Cast(JsonCast::class)]
-    protected array $details = [];
+    public array $details = [];
 
     #[Column('histories')]
     #[Cast(JsonCast::class)]
     #[Cast(EventOrderHistories::class)]
-    protected EventOrderHistories $histories;
+    public EventOrderHistories $histories;
 
     #[Column('state')]
     #[Cast(EventOrderState::class)]
-    protected EventOrderState $state;
+    public EventOrderState $state;
 
     #[Column('attends')]
-    protected int $attends = 0;
+    public int $attends = 0;
 
     #[Column('alternates')]
-    protected int $alternates = 0;
+    public int $alternates = 0;
 
     #[Column('payment')]
-    protected string $payment = '';
+    public string $payment = '';
 
     #[Column('payment_data')]
     #[Cast(JsonCast::class)]
-    protected array $paymentData = [];
+    public array $paymentData = [];
 
     #[Column('expired_at')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $expiredAt = null;
+    public ?Chronos $expiredAt = null;
 
     #[Column('paid_at')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $paidAt = null;
+    public ?Chronos $paidAt = null;
 
     #[Column('done_at')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $doneAt = null;
+    public ?Chronos $doneAt = null;
 
     #[Column('screenshots')]
     #[Cast(JsonCast::class)]
-    protected array $screenshots = [];
+    public array $screenshots = [];
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null;
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null;
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void

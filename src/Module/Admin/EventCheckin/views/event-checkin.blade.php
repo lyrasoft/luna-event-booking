@@ -45,13 +45,13 @@ use Windwalker\Core\Router\SystemUri;
                 <h2>報到成功</h2>
 
                 <div class="mb-3">
-                    編號： #{{ $attend->getNo() }}
+                    編號： #{{ $attend->no }}
                 </div>
 
                 <div>
-                    姓名： {{ $attend->getName() }}
-                    @if ($attend->getNick())
-                        ({{ $attend->getNick() }})
+                    姓名： {{ $attend->name }}
+                    @if ($attend->nick)
+                        ({{ $attend->nick }})
                     @endif
                 </div>
             @endif

@@ -50,7 +50,7 @@ class EventOrderListView implements ViewModelInterface
 
         $items = $this->repository->getFrontListSelector()
             ->addFilters([])
-            ->where('event_order.user_id', $user->getId())
+            ->where('event_order.user_id', $user->id)
             ->ordering($ordering)
             ->page($page)
             ->limit($limit)

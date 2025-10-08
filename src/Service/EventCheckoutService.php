@@ -45,7 +45,7 @@ class EventCheckoutService
         /** @var EventOrder $order */
         $order = $this->orm->createOne($order);
 
-        $order->setNo($this->orderService->createNo($order));
+        $order->no = $this->orderService->createNo($order);
 
         $this->orm->updateOne($order);
 
@@ -57,7 +57,7 @@ class EventCheckoutService
             /** @var EventAttend $attend */
             $attend = $this->orm->createOne($attend);
 
-            $attend->setNo($this->attendeeService->createNo($order, $attend));
+            $attend->no = $this->attendeeService->createNo($order, $attend);
 
             $this->orm->updateOne($attend);
 
@@ -73,12 +73,12 @@ class EventCheckoutService
     {
         // Todo: Handle Alternates
 
-        $order->setState($this->orderService->getInitialState($order));
-        $order->getHistories()
+        $order->state = $this->orderService->getInitialState($order);
+        $order->histories
             ->unshift(
                 (new EventOrderHistory())
-                    ->setState($order->getState())
-                    ->setStateText($order->getState()->getTitle($this->lang))
+                    ->setState($order->state)
+                    ->setStateText($order->state->getTitle($this->lang))
                     ->setType(OrderHistoryType::SYSTEM)
                     ->setMessage('訂單建立')
                     ->setNotify(true)
@@ -89,8 +89,8 @@ class EventCheckoutService
 
     public function prepareEventAttend(EventOrder $order, EventAttend $attend): EventAttend
     {
-        $attend->setOrderId($order->getId());
-        $attend->setState($this->attendeeService->getInitialState($order, $attend));
+        $attend->orderId = $order->id;
+        $attend->state = $this->attendeeService->getInitialState($order, $attend);
 
         return $attend;
     }
@@ -103,13 +103,13 @@ class EventCheckoutService
             throw new \RuntimeException('Order not found in attending store.');
         }
 
-        $gateway = $this->paymentService->getGateway($order->getPayment());
+        $gateway = $this->paymentService->getGateway($order->payment);
 
         if (!$gateway) {
             throw new \RuntimeException('付款方式不可用，請聯繫管理員');
         }
 
-        $order->setTransactionNo($gateway->createTransactionNo($order));
+        $order->transactionNo = $gateway->createTransactionNo($order);
 
         $this->orm->updateOne($order);
 

@@ -38,87 +38,87 @@ class EventStage implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('event_id')]
-    protected int $eventId = 0;
+    public int $eventId = 0;
 
     #[Column('venue_id')]
-    protected int $venueId = 0;
+    public int $venueId = 0;
 
     #[Column('title')]
-    protected string $title = '';
+    public string $title = '';
 
     #[Column('alias')]
     #[Slugify]
-    protected string $alias = '';
+    public string $alias = '';
 
     #[Column('cover')]
-    protected string $cover = '';
+    public string $cover = '';
 
     #[Column('images')]
     #[Cast(JsonCast::class)]
-    protected array $images = [];
+    public array $images = [];
 
     #[Column('description')]
-    protected string $description = '';
+    public string $description = '';
 
     #[Column('attend_url')]
-    protected string $attendUrl = '';
+    public string $attendUrl = '';
 
     #[Column('quota')]
-    protected ?int $quota = null;
+    public ?int $quota = null;
 
     #[Column('alternate')]
-    protected ?int $alternate = null;
+    public ?int $alternate = null;
 
     #[Column('less')]
-    protected ?int $less = null;
+    public ?int $less = null;
 
     #[Column('attends')]
-    protected int $attends = 0;
+    public int $attends = 0;
 
     #[Column('state')]
     #[Cast('int')]
     #[Cast(BasicState::class)]
-    protected BasicState $state;
+    public BasicState $state;
 
     #[Column('ordering')]
-    protected int $ordering = 0;
+    public int $ordering = 0;
 
     #[Column('publish_up')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $publishUp = null;
+    public ?Chronos $publishUp = null;
 
     #[Column('start_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $startDate = null;
+    public ?Chronos $startDate = null;
 
     #[Column('end_date')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $endDate = null;
+    public ?Chronos $endDate = null;
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null;
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null;
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void
@@ -160,14 +160,14 @@ class EventStage implements EntityInterface
                 'stage_id' => $old?->getId(),
             ],
             [
-                'stage_id' => $item->getId(),
+                'stage_id' => $item->id,
             ]
         );
     }
 
     public function makeLink(Navigator $nav): RouteUri
     {
-        return $nav->to('front::event_stage_item')->id($this->getId())->alias($this->getAlias());
+        return $nav->to('front::event_stage_item')->id($this->id)->alias($this->alias);
     }
 
     public function getId(): ?int

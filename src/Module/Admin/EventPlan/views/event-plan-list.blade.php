@@ -130,7 +130,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         <tr>
                             {{-- Checkbox --}}
                             <td>
-                                <x-row-checkbox :row="$i" :id="$item->getId()"></x-row-checkbox>
+                                <x-row-checkbox :row="$i" :id="$item->id"></x-row-checkbox>
                             </td>
 
                             {{-- State --}}
@@ -139,7 +139,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                     button-style="width: 100%"
                                     use-states
                                     :workflow="$workflow"
-                                    :id="$item->getId()"
+                                    :id="$item->id"
                                     :value="$item->state"
                                 ></x-state-dropdown>
                             </td>
@@ -147,8 +147,8 @@ $workflow = $app->service(BasicStateWorkflow::class);
                             {{-- Title --}}
                             <td>
                                 <div>
-                                    <a href="{{ $nav->to('event_plan_edit')->id($item->getId()) }}">
-                                        {{ $item->getTitle() }}
+                                    <a href="{{ $nav->to('event_plan_edit')->id($item->id) }}">
+                                        {{ $item->title }}
                                     </a>
 
                                     @if ($item->isRequireValidate())
@@ -162,25 +162,25 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                             {{-- Price --}}
                             <td class="text-end">
-                                {{ $vm->priceFormat($item->getPrice()) }}
+                                {{ $vm->priceFormat($item->price) }}
                             </td>
 
                             {{-- Sold / Quota --}}
                             <td class="text-end">
-                                {{ numberFormat($item->getSold()) }}
+                                {{ numberFormat($item->sold) }}
                                 /
-                                {{ numberFormat($item->getQuota()) }}
+                                {{ numberFormat($item->quota) }}
                             </td>
 
                             <td>
-                                @if ($item->getState()->isUnpublished())
+                                @if ($item->state->isUnpublished())
                                     <div class="text-danger">
                                         <i class="far fa-pause"></i>
                                         關閉
                                     </div>
                                 @else
-                                    @if (!$item->getStartDate() || $item->getStartDate()->isPast())
-                                        @if (!$item->getEndDate() || $item->getEndDate()->isFuture())
+                                    @if (!$item->startDate || $item->startDate->isPast())
+                                        @if (!$item->endDate || $item->endDate->isFuture())
                                             <div class="text-success">
                                                 <i class="far fa-play"></i>
                                                 銷售中
@@ -202,18 +202,18 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                             {{-- Start --}}
                             <td>
-                                {{ $chronos->toLocalFormat($item->getStartDate(), 'Y-m-d H:i') ?: '-' }}
+                                {{ $chronos->toLocalFormat($item->startDate, 'Y-m-d H:i') ?: '-' }}
                             </td>
 
                             {{-- End --}}
                             <td>
-                                {{ $chronos->toLocalFormat($item->getEndDate(), 'Y-m-d H:i') ?: '-' }}
+                                {{ $chronos->toLocalFormat($item->endDate, 'Y-m-d H:i') ?: '-' }}
                             </td>
 
                             {{-- Delete --}}
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-outline-secondary"
-                                    @click="grid.deleteItem('{{ $item->getId() }}')"
+                                    @click="grid.deleteItem('{{ $item->id }}')"
                                     data-dos
                                 >
                                     <i class="fa-solid fa-trash"></i>
@@ -222,7 +222,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                             {{-- ID --}}
                             <td class="text-end">
-                                {{ $item->getId() }}
+                                {{ $item->id }}
                             </td>
                         </tr>
                     @empty

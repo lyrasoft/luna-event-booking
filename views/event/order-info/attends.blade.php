@@ -67,45 +67,45 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
 
         <tr>
             <td class="text-end">
-                {{ $attend->getId() }}
+                {{ $attend->id }}
             </td>
             <td>
-                #{{ $attend->getNo() }}
+                #{{ $attend->no }}
             </td>
             <td>
-                {{ $attend->getState()->getTitle($lang) }}
+                {{ $attend->state->getTitle($lang) }}
             </td>
             <td>
                 <div>
-                    {{ $attend->getName() }}
+                    {{ $attend->name }}
                 </div>
 
-                @if ($attend->getNick())
+                @if ($attend->nick)
                     <div class="small text-muted mt-1">
-                        {{ $attend->getNick() }}
+                        {{ $attend->nick }}
                     </div>
                 @endif
             </td>
             <td>
-                {{ $attend->getPlanTitle() }}
+                {{ $attend->planTitle }}
             </td>
             <td>
-                @if ($attend->getEmail())
+                @if ($attend->email)
                     <div class="mb-1">
                         <i class="far fa-fw fa-envelope"></i>
-                        {{ $attend->getEmail() }}
+                        {{ $attend->email }}
                     </div>
                 @endif
-                @if ($attend->getMobile())
+                @if ($attend->mobile)
                     <div class="mb-1">
                         <i class="far fa-fw fa-mobile"></i>
-                        {{ $attend->getMobile() }}
+                        {{ $attend->mobile }}
                     </div>
-                @endif
-                @if ($attend->getPhone())
+                    @endif
+                @if ($attend->phone)
                     <div>
                         <i class="far fa-fw fa-phone"></i>
-                        {{ $attend->getPhone() }}
+                        {{ $attend->phone }}
                     </div>
                 @endif
             </td>
@@ -113,7 +113,7 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
             {{--    ---}}
             {{--</td>--}}
             <td class="text-end">
-                {{ $priceFormatter->format($attend->getPrice()) }}
+                {{ $priceFormatter->format($attend->price) }}
             </td>
         </tr>
     @endforeach

@@ -19,13 +19,13 @@ class EventMemberMap implements EntityInterface
     use EntityTrait;
 
     #[Column('type')]
-    protected string $type = '';
+    public string $type = '';
 
     #[Column('member_id')]
-    protected int $memberId = 0;
+    public int $memberId = 0;
 
     #[Column('target_id')]
-    protected int $targetId = 0;
+    public int $targetId = 0;
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void

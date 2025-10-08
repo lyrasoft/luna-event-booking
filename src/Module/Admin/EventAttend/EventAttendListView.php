@@ -91,7 +91,7 @@ class EventAttendListView implements ViewModelInterface, FilterAwareViewModelInt
             )
             ->tapIf(
                 (bool) $eventStage,
-                fn(ListSelector $selector) => $selector->where('event_attend.stage_id', $eventStage->getEventId())
+                fn(ListSelector $selector) => $selector->where('event_attend.stage_id', $eventStage->eventId)
             )
             ->where('order.state', [EventOrderState::DONE, EventOrderState::PENDING_APPROVAL])
             ->ordering($ordering)
@@ -157,8 +157,8 @@ class EventAttendListView implements ViewModelInterface, FilterAwareViewModelInt
             $htmlFrame->setTitle(
                 $this->trans(
                     'event.stage.edit.heading',
-                    event: $event?->getTitle(),
-                    stage: $eventStage?->getTitle(),
+                    event: $event?->title,
+                    stage: $eventStage?->title,
                     title: $title
                 )
             );

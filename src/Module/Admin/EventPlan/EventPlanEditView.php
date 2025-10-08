@@ -77,8 +77,8 @@ class EventPlanEditView implements ViewModelInterface
         $htmlFrame->setTitle(
             $this->trans(
                 'event.stage.edit.heading',
-                event: $event->getTitle(),
-                stage: $eventStage->getTitle(),
+                event: $event->title,
+                stage: $eventStage->title,
                 title: $this->trans('unicorn.title.edit', title: '票價方案')
             )
         );

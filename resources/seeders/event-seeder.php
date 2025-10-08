@@ -54,74 +54,68 @@ $seeder->import(
 
             $item = $mapper->createEntity();
 
-            $item->setCategoryId((int) $faker->randomElement($categoryIds));
-            $item->setTitle($faker->sentence(2));
-            $item->setAlias(
-                SlugHelper::safe($item->getTitle())
-            );
-            $item->setSubtitle($faker->sentence(3));
-            $item->setCover($faker->unsplashImage(1200, 800));
-            $item->setImages(
-                [
-                    $createImage(),
-                    $createImage(),
-                    $createImage(),
-                ]
-            );
-            $item->setIntro($faker->sentence(5));
-            $item->setDescription($faker->paragraph(3));
-            $item->setState(1);
+            $item->categoryId = (int) $faker->randomElement($categoryIds);
+            $item->title = $faker->sentence(2);
+            $item->alias = SlugHelper::safe($item->title);
+            $item->subtitle = $faker->sentence(3);
+            $item->cover = $faker->unsplashImage(1200, 800);
+            $item->images = [
+                $createImage(),
+                $createImage(),
+                $createImage(),
+            ];
+            $item->intro = $faker->sentence(5);
+            $item->description = $faker->paragraph(3);
+            $item->state = 1;
 
             $event = $mapper->createOne($item);
 
             foreach (range(1, 4) as $s) {
                 $stage = $stageMapper->createEntity();
 
-                $stage->setEventId($event->getId());
-                $stage->setVenueId((int) $faker->randomElement($venueIds));
-                $stage->setTitle('Stage ' . $s);
-                $stage->setCover($faker->unsplashImage(1200, 800));
-                $stage->setImages(
-                    [
-                        $createImage(),
-                        $createImage(),
-                        $createImage(),
-                    ]
-                );
-                $stage->setDescription($faker->paragraph(3));
-                $stage->setQuota(20);
-                $stage->setAlternate(5);
-                $stage->setLess(5);
-                $stage->setState(1);
-                $stage->setOrdering($s);
-                $stage->setStartDate($currentDate = $currentDate->modify('+2months'));
-                $stage->setEndDate($currentDate->modify('+14days'));
+                $stage->eventId = $event->id;
+                $stage->venueId = (int) $faker->randomElement($venueIds);
+                $stage->title = 'Stage ' . $s;
+                $stage->cover = $faker->unsplashImage(1200, 800);
+                $stage->images = [
+                    $createImage(),
+                    $createImage(),
+                    $createImage(),
+                ];
+                $stage->description = $faker->paragraph(3);
+                $stage->quota = 20;
+                $stage->alternate = 5;
+                $stage->less = 5;
+                $stage->state = 1;
+                $stage->ordering = $s;
+                $stage->startDate = $currentDate = $currentDate->modify('+2months');
+                $stage->endDate = $currentDate->modify('+14days');
 
                 $stage = $stageMapper->createOne($stage);
 
                 // Plans
                 $plan = new EventPlan();
-                $plan->setEventId($event->getId());
-                $plan->setStageId($stage->getId());
-                $plan->setTitle('Early Access');
-                $plan->setEndDate($stage->getStartDate()->modify('-30days'));
-                $plan->setState(1);
-                $plan->setQuota(5);
-                $plan->setOnceMax(1);
-                $plan->setOriginPrice(800);
-                $plan->setPrice(500);
+                $plan->eventId = $event->id;
+                $plan->stageId = $stage->id;
+                $plan->title = 'Early Access';
+                $plan->endDate = $stage->startDate->modify('-30days');
+                $plan->state = 1;
+                $plan->quota = 5;
+                $plan->onceMax = 1;
+                $plan->originPrice = 800;
+                $plan->price = 500;
 
                 $planMapper->createOne($plan);
 
                 $plan = new EventPlan();
-                $plan->setEventId($event->getId());
-                $plan->setStageId($stage->getId());
-                $plan->setTitle('Basic Ticket');
-                $plan->setStartDate($stage->getStartDate()->modify('-30days'));
-                $plan->setState(1);
-                $plan->setQuota($stage->getQuota());
-                $plan->setOnceMax(1);
-                $plan->setPrice(800);
+                $plan->eventId = $event->id;
+                $plan->stageId = $stage->id;
+                $plan->title = 'Basic Ticket';
+                $plan->startDate = $stage->startDate->modify('-30days');
+                $plan->state = 1;
+                $plan->quota = $stage->quota;
+                $plan->onceMax = 1;
+                $plan->price = 800;
 
                 $planMapper->createOne($plan);
 

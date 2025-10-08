@@ -65,7 +65,7 @@ class EventStageListView implements ViewModelInterface
             ->ordering($ordering)
             ->tapIf(
                 (bool) $currentCategory,
-                fn (ListSelector $selector) => $selector->where('event.category_id', $currentCategory->getId())
+                fn (ListSelector $selector) => $selector->where('event.category_id', $currentCategory->id)
             )
             ->orWhere(
                 function (Query $query) use ($now) {

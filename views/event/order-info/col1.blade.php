@@ -46,28 +46,28 @@ $attributes->props(
         <tr class="">
             <th style="width: 30%">訂單編號</th>
             <td>
-                <strong>#{{ $item->getNo() }}</strong>
+                <strong>#{{ $item->no }}</strong>
             </td>
         </tr>
 
         <tr class="">
             <th>狀態</th>
-            <td>{{ $item->getState()->getTitle($lang) }}</td>
+            <td>{{ $item->state->getTitle($lang) }}</td>
         </tr>
 
         <tr class="">
             <th>活動</th>
-            <td>{{ $event->getTitle() }}</td>
+            <td>{{ $event->title }}</td>
         </tr>
 
         <tr class="">
             <th>梯次</th>
-            <td>{{ $stage->getTitle() }}</td>
+            <td>{{ $stage->title }}</td>
         </tr>
 
         <tr class="">
             <th>建立時間</th>
-            <td>{{ $chronos->toLocalFormat($item->getCreated(), 'Y-m-d H:i') }}</td>
+            <td>{{ $chronos->toLocalFormat($item->created, 'Y-m-d H:i') }}</td>
         </tr>
 
         {{--<tr class="">--}}

@@ -72,9 +72,9 @@ $seeder->import(
         /** @var EventStage $stage */
         foreach ($stages as $stage) {
             /** @var Event $event */
-            $event = $events[$stage->getEventId()];
+            $event = $events[$stage->eventId];
 
-            $plans = $planGroup[$stage->getId()] ?? collect();
+            $plans = $planGroup[$stage->id] ?? collect();
             $attends = [];
             $total = BigDecimal::zero();
 
@@ -83,61 +83,59 @@ $seeder->import(
                 $plan = $faker->randomElement($plans->dump());
 
                 $attend = new EventAttend();
-                $attend->setEventId($event->getId());
-                $attend->setStageId($stage->getId());
-                $attend->setPlanId($plan->getId());
-                $attend->setPlanTitle($plan->getTitle());
-                $attend->setPrice($plan->getPrice());
-                $attend->setName($faker->firstName() . $faker->lastName());
-                $attend->setNick($faker->firstName());
-                $attend->setMobile($faker->numerify('09########'));
-                $attend->setPhone($faker->numerify('02-####-####'));
-                $attend->setAddress($faker->address());
-                $attend->setState(AttendState::PENDING);
-                $attend->setScreenshots(
-                    [
-                        'plan' => $plan
-                    ]
-                );
+                $attend->eventId = $event->id;
+                $attend->stageId = $stage->id;
+                $attend->planId = $plan->id;
+                $attend->planTitle = $plan->title;
+                $attend->price = $plan->price;
+                $attend->name = $faker->firstName() . $faker->lastName();
+                $attend->nick = $faker->firstName();
+                $attend->mobile = $faker->numerify('09########');
+                $attend->phone = $faker->numerify('02-####-####');
+                $attend->address = $faker->address();
+                $attend->state = AttendState::PENDING;
+                $attend->screenshots = [
+                    'plan' => $plan
+                ];
 
-                $total = $total->plus($attend->getPrice());
+                $total = $total->plus($attend->price);
 
                 $attends[] = $attend;
             }
 
             $item = $mapper->createEntity();
 
-            $item->setUserId((int) $faker->randomElement($userIds));
-            $item->setEventId($event->getId());
-            $item->setStageId($stage->getId());
-            $item->setNo($orderService->createNo($item));
-            $item->setInvoiceType($faker->randomElement(InvoiceType::cases()));
-            $invoice = $item->getInvoiceData()
+            $item->userId = (int) $faker->randomElement($userIds);
+            $item->eventId = $event->id;
+            $item->stageId = $stage->id;
+            $item->no = $orderService->createNo($item);
+            $item->invoiceType = $faker->randomElement(InvoiceType::cases());
+            $invoice = $item->invoiceData
                 ->setNo($invoiceService->createNo($item));
 
-            if ($item->getInvoiceType() === InvoiceType::BUSINESS) {
+            if ($item->invoiceType === InvoiceType::BUSINESS) {
                 $invoice->setVat($faker->numerify('########'));
                 $invoice->setTitle($faker->company());
             }
 
-            $item->setTotal($total);
-            $item->getTotals()
+            $item->total = $total;
+            $item->totals
                 ->set(
                     'grand_total',
                     (new EventOrderTotal())
-                    ->setTitle('Grand Total')
-                    ->setCode('grand_total')
-                    ->setValue($total->toFloat())
-                    ->setType('total')
+                        ->setTitle('Grand Total')
+                        ->setCode('grand_total')
+                        ->setValue($total->toFloat())
+                        ->setType('total')
                 );
 
-            $item->setName($faker->name());
-            $item->setNick($faker->firstName());
-            $item->setMobile($faker->numerify('09########'));
-            $item->setPhone($faker->numerify('02-####-####'));
-            $item->setAddress($faker->address());
-            $item->setState(EventOrderState::DONE);
-            $item->getHistories()
+            $item->name = $faker->name();
+            $item->nick = $faker->firstName();
+            $item->mobile = $faker->numerify('09########');
+            $item->phone = $faker->numerify('02-####-####');
+            $item->address = $faker->address();
+            $item->state = EventOrderState::DONE;
+            $item->histories
                 ->push(
                     (new EventOrderHistory())
                         ->setState(EventOrderState::UNPAID)
@@ -146,20 +144,18 @@ $seeder->import(
                         ->setMessage('Order Created')
                 );
             // $item->setPayment('atm');
-            $item->setExpiredAt('+14days');
-            $item->setScreenshots(
-                [
-                    'event' => $event,
-                    'stage' => $stage
-                ]
-            );
+            $item->expiredAt = '+14days';
+            $item->screenshots = [
+                'event' => $event,
+                'stage' => $stage
+            ];
 
             /** @var EventOrder $item */
             $item = $mapper->createOne($item);
 
             foreach ($attends as $attend) {
-                $attend->setOrderId($item->getId());
-                $attend->setNo($attendeeService->createNo($item, $attend));
+                $attend->orderId = $item->id;
+                $attend->no = $attendeeService->createNo($item, $attend);
 
                 $orm->createOne($attend);
 

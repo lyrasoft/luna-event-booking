@@ -53,13 +53,13 @@ class EventStageItemView implements ViewModelInterface
 
         /** @var EventStage $item */
         $item = $this->repository->mustGetItem($id);
-        $event = $this->orm->mustFindOne(Event::class, $item->getEventId());
+        $event = $this->orm->mustFindOne(Event::class, $item->eventId);
 
         [, , $category] = $this->eventViewService->checkEventAndStageAvailable($event, $item);
 
         // Keep URL unique
-        if (($item->getAlias() !== $alias) && !$app->retrieve(Browser::class)->isRobot()) {
-            return $app->getNav()->self()->alias($item->getAlias());
+        if (($item->alias !== $alias) && !$app->retrieve(Browser::class)->isRobot()) {
+            return $app->getNav()->self()->alias($item->alias);
         }
 
         $view[$item::class] = $item;
@@ -68,7 +68,7 @@ class EventStageItemView implements ViewModelInterface
         // Plans
         $plans = $this->orm->from(EventPlan::class)
             ->where('state', 1)
-            ->where('stage_id', $item->getId())
+            ->where('stage_id', $item->id)
             ->order('start_date', 'ASC')
             ->all(EventPlan::class);
 
@@ -78,10 +78,10 @@ class EventStageItemView implements ViewModelInterface
     #[ViewMetadata]
     public function prepareMetadata(HtmlFrame $htmlFrame, Event $event, EventStage $item): void
     {
-        $htmlFrame->setTitle($event->getTitle());
-        $htmlFrame->setCoverImagesIfNotEmpty($event->getCover());
+        $htmlFrame->setTitle($event->title);
+        $htmlFrame->setCoverImagesIfNotEmpty($event->cover);
         $htmlFrame->setDescriptionIfNotEmpty(
-            (string) str($item->getDescription())->stripHtmlTags(),
+            (string) str($item->description)->stripHtmlTags(),
             200,
         );
     }

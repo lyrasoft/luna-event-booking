@@ -73,7 +73,7 @@ class EventStageListView implements ViewModelInterface, FilterAwareViewModelInte
                 $search['*'] ?? '',
                 $this->getSearchFields()
             )
-            ->where('event_stage.event_id', $event->getId())
+            ->where('event_stage.event_id', $event->id)
             ->ordering($ordering)
             ->page($page)
             ->limit($limit)
@@ -127,7 +127,7 @@ class EventStageListView implements ViewModelInterface, FilterAwareViewModelInte
         $htmlFrame->setTitle(
             $this->trans(
                 'event.edit.heading',
-                event: $event->getTitle(),
+                event: $event->title,
                 title: $this->trans('unicorn.title.grid', title: '梯次')
             )
         );

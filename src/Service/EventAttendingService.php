@@ -98,7 +98,7 @@ class EventAttendingService
 
         /** @var EventPlan $plan */
 
-        if ($plan->getStageId() !== $stage->getId()) {
+        if ($plan->stageId !== $stage->id) {
             throw new InvalidPlanException('不正確的方案', 404);
         }
 
@@ -107,8 +107,8 @@ class EventAttendingService
         }
 
         // Todo: handle Alternates
-        if ($plan->getQuota() < ($plan->getSold() + $qty)) {
-            throw new InvalidPlanException('方案：' . $plan->getTitle() . ' 名額已滿', 403);
+        if ($plan->quota < ($plan->sold + $qty)) {
+            throw new InvalidPlanException('方案：' . $plan->title . ' 名額已滿', 403);
         }
 
         return $plan;
@@ -116,7 +116,7 @@ class EventAttendingService
 
     public function getStoreByPlansQuantity(EventStage|int $stage, array $maps, bool $lock = false): EventAttendingStore
     {
-        $this->setPlansAndQuantity($stage->getId(), $maps, true);
+        $this->setPlansAndQuantity($stage->id, $maps, true);
 
         return $this->getAttendingStore($stage, $lock);
     }
@@ -134,7 +134,7 @@ class EventAttendingService
                 ->get(EventStage::class);
         }
 
-        $data = $this->getAttendingDataFromSession($stage->getId());
+        $data = $this->getAttendingDataFromSession($stage->id);
 
         $store = new EventAttendingStore();
 
@@ -152,17 +152,17 @@ class EventAttendingService
             try {
                 $plan = $this->validatePlan($stage, $planId, (int) $qty, $lock);
             } catch (\Exception $e) {
-                $this->forgetAttendingData($stage->getId());
+                $this->forgetAttendingData($stage->id);
 
                 throw $e;
             }
 
-            $attends = $attendGroup[$plan->getId()] ?? [];
+            $attends = $attendGroup[$plan->id] ?? [];
 
             $planData = new EventAttendingPlan();
             $planData->setPlan($plan);
             $planData->setQuantity((int) $qty);
-            $planData->setPrice($plan->getPrice());
+            $planData->setPrice($plan->price);
             $planData->setTotal(
                 $planData->getPrice()->multipliedBy((int) $qty)
             );
@@ -173,7 +173,7 @@ class EventAttendingService
 
         // Check stage quota
         // Todo: Handle Alternate
-        if ($stage->getQuota() < ($stage->getAttends() + $store->getTotalQuantity())) {
+        if ($stage->quota < ($stage->attends + $store->getTotalQuantity())) {
             throw new ValidateFailException('活動名額已滿');
         }
 
@@ -192,7 +192,7 @@ class EventAttendingService
     {
         $data = $this->getAttendingStore($stage);
 
-        $this->forgetAttendingData($stage->getId());
+        $this->forgetAttendingData($stage->id);
 
         return $data;
     }

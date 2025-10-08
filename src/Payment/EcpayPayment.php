@@ -36,7 +36,7 @@ class EcpayPayment implements EventPaymentInterface
         /** @var EventOrder $order */
         $order = $store->getOrder();
 
-        $order->setTransactionNo($this->createTransactionNo($order));
+        $order->transactionNo = $this->createTransactionNo($order);
 
         $this->orm->updateOne($order);
 
@@ -56,7 +56,7 @@ class EcpayPayment implements EventPaymentInterface
     public function createTransactionNo(EventOrder $order): string
     {
         // Max length: 20
-        $no = 'P' . str_pad((string) $order->getId(), 13, '0', STR_PAD_LEFT);
+        $no = 'P' . str_pad((string) $order->id, 13, '0', STR_PAD_LEFT);
 
         if (WINDWALKER_DEBUG) {
             $no .= 'T' . BaseConvert::encode(time(), BaseConvert::BASE62);

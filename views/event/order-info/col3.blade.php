@@ -40,28 +40,28 @@ $attributes->props(
         <tr class="">
             <th style="width: 30%">付款方式</th>
             <td>
-                {{ $item->getPayment() }}
+                {{ $item->payment }}
             </td>
         </tr>
 
         <tr class="">
             <th>交易編號</th>
-            <td>{{ $item->getTransactionNo() }}</td>
+            <td>{{ $item->transactionNo }}</td>
         </tr>
 
         <tr class="">
             <th>發票類型</th>
-            <td>{{ $item->getInvoiceType()->getTitle($lang) }}</td>
+            <td>{{ $item->invoiceType->getTitle($lang) }}</td>
         </tr>
 
         <tr class="">
             <th>發票編號</th>
-            <td>{{ $item->getInvoiceData()->getNo() }}</td>
+            <td>{{ $item->invoiceData->getNo() }}</td>
         </tr>
 
         <tr class="">
             <th>付款日期</th>
-            <td>{{ $chronos->toLocalFormat($item->getPaidAt(), 'Y-m-d H:i') ?: '-' }}</td>
+            <td>{{ $chronos->toLocalFormat($item->paidAt, 'Y-m-d H:i') ?: '-' }}</td>
         </tr>
     </table>
 </x-card>

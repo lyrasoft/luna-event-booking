@@ -39,31 +39,31 @@ $attributes->props(
         <tr class="">
             <th style="width: 30%">訂購者</th>
             <td>
-                {{ $item->getName() }}
-                @if ($item->getNick())
-                    ({{ $item->getNick() }})
+                {{ $item->name }}
+                @if ($item->nick)
+                    ({{ $item->nick }})
                 @endif
             </td>
         </tr>
 
         <tr class="">
             <th>Email</th>
-            <td>{{ $item->getEmail() }}</td>
+            <td>{{ $item->email }}</td>
         </tr>
 
         <tr class="">
             <th>手機</th>
-            <td>{{ $item->getMobile() }}</td>
+            <td>{{ $item->mobile }}</td>
         </tr>
 
         <tr class="">
             <th>電話</th>
-            <td>{{ $item->getPhone() }}</td>
+            <td>{{ $item->phone }}</td>
         </tr>
 
         <tr class="">
             <th>地址</th>
-            <td>{{ $item->getAddress() }}</td>
+            <td>{{ $item->address }}</td>
         </tr>
     </table>
 </x-card>

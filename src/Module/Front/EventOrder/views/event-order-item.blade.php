@@ -42,12 +42,12 @@ use Windwalker\Form\Form;
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
 
-$screenshots = $item->getScreenshots();
+$screenshots = $item->screenshots;
 
 $event = $vm->tryEntity(Event::class, $screenshots['event']);
 $stage = $vm->tryEntity(EventStage::class, $screenshots['stage']);
 
-$histories = $item->getHistories();
+$histories = $item->histories;
 ?>
 
 @extends('global.body')
@@ -91,7 +91,7 @@ $histories = $item->getHistories();
 
                     <div class="card-body">
                         @php
-                            $totals = $item->getTotals();
+                            $totals = $item->totals;
                         @endphp
 
                         @foreach ($totals as $total)

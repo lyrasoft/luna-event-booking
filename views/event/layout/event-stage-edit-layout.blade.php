@@ -38,17 +38,17 @@ if (!$eventStage && $eventStageId) {
 $links = [
     [
         'title' => '梯次編輯',
-        'link' => fn() => $nav->to('event_stage_edit')->id($eventStage->getId()),
+        'link' => fn() => $nav->to('event_stage_edit')->id($eventStage->id),
         'active' => fn() => $menu->active('event_stage_edit')
     ],
     [
         'title' => '票種管理',
-        'link' => fn() => $nav->to('event_plan_list')->var('eventStageId', $eventStage->getId()),
+        'link' => fn() => $nav->to('event_plan_list')->var('eventStageId', $eventStage->id),
         'active' => fn() => $menu->active('event_plan_list')
     ],
     [
         'title' => '報名者管理',
-        'link' => fn() => $nav->to('event_stage_attend_list')->var('eventStageId', $eventStage->getId()),
+        'link' => fn() => $nav->to('event_stage_attend_list')->var('eventStageId', $eventStage->id),
         'active' => fn() => $menu->active('event_stage_attend_list')
     ],
 ];

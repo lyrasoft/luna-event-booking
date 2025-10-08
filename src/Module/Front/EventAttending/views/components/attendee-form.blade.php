@@ -50,14 +50,14 @@ $i = 0;
         @endif
 
         <div class="mb-4">
-            <h4>方案: {{ $plan->getPlan()->getTitle() }}</h4>
+            <h4>方案: {{ $plan->getPlan()->title }}</h4>
 
             @foreach (range(1, $plan->getQuantity()) as $k)
                 @php
                     $attend = $plan->getAttends()[$k - 1] ?? [];
                     $i++;
                     $uid = $attend['uid'] ?? tid();
-                    $pid = $plan->getPlan()->getId();
+                    $pid = $plan->getPlan()->id;
                     $fieldNamePrefix = "attends[$pid][$uid]";
                 @endphp
                 <div>
@@ -137,7 +137,7 @@ $i = 0;
                     <div class="d-none">
                         <input type="hidden" name="{{ $fieldNamePrefix }}[uid]" value="{{ $uid }}" />
                         <input type="hidden" name="{{ $fieldNamePrefix }}[plan_id]"
-                            value="{{ $plan->getPlan()->getId() }}" />
+                            value="{{ $plan->getPlan()->id }}" />
                     </div>
                 </div>
             @endforeach

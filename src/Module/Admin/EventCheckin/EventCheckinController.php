@@ -22,21 +22,21 @@ class EventCheckinController
         $no = $app->input('attendNo');
 
         $attend = $orm->mustFindOne(EventAttend::class, compact('no'));
-        $order = $orm->mustFindOne(EventOrder::class, $attend->getOrderId());
+        $order = $orm->mustFindOne(EventOrder::class, $attend->orderId);
 
         /** @var View $view */
         $view = $app->make(EventCheckinView::class);
 
-        if ($attend->getState() === AttendState::CHECKED_IN) {
+        if ($attend->state === AttendState::CHECKED_IN) {
             return $view->render();
         }
 
-        if ($order->getState() !== EventOrderState::DONE) {
+        if ($order->state !== EventOrderState::DONE) {
             return $view->render(['status' => 'fail', 'message' => '訂單未完成']);
         }
 
-        $attend->setState(AttendState::CHECKED_IN);
-        $attend->setCheckedInAt('now');
+        $attend->state = AttendState::CHECKED_IN;
+        $attend->checkedInAt = 'now';
         $orm->updateOne($attend);
 
         return $view->render(['status' => 'fail', 'message' => '訂單未完成']);

@@ -59,7 +59,7 @@ class EventOrderItemView implements ViewModelInterface
         /** @var EventOrder $item */
         $item = $this->repository->mustGetItem(compact('no'));
 
-        if ($user->getId() !== $item->getUserId()) {
+        if ($user->id !== $item->userId) {
             throw new RouteNotFoundException();
         }
 
@@ -68,11 +68,11 @@ class EventOrderItemView implements ViewModelInterface
                 EventPlan::class,
                 'plan'
             )
-            ->where('event_attend.order_id', $item->getId())
+            ->where('event_attend.order_id', $item->id)
             ->groupByJoins()
             ->all(EventAttend::class);
 
-        $gateway = $this->paymentService->getGateway($item->getPayment());
+        $gateway = $this->paymentService->getGateway($item->payment);
         $paymentInfo = $gateway?->orderInfo($item, $attends);
 
         $view[$item::class] = $item;
@@ -84,7 +84,7 @@ class EventOrderItemView implements ViewModelInterface
     public function prepareMetadata(HtmlFrame $htmlFrame, EventOrder $item): void
     {
         $htmlFrame->setTitle(
-            '訂單: ' . $item->getNo()
+            '訂單: ' . $item->no
         );
     }
 }

@@ -44,7 +44,7 @@ use Windwalker\Form\Form;
 
 @section('content')
     <div class="container l-event-attending my-4">
-        <form id="attending-form" action="{{ $nav->to('event_checkout')->var('stageId', $stage->getId()) }}"
+        <form id="attending-form" action="{{ $nav->to('event_checkout')->var('stageId', $stage->id) }}"
             method="post"
             uni-form-validate='{"scroll": true}'>
             <div class="mx-auto d-flex flex-column gap-4" style="max-width: 960px">

@@ -45,30 +45,30 @@ $attributes->props(
 <x-card>
     <div class="row">
         <div class="col-lg-4">
-            <img src="{{ $stage->getCover() ?: $event->getCover() }}" alt="cover"
+            <img src="{{ $stage->cover ?: $event->cover }}" alt="cover"
                 class="img-fluid rounded"
             >
         </div>
         <div class="col-lg-8 d-flex flex-column">
             <h3>
                 <a href="{{ $stage->makeLink($nav) }}" target="_blank">
-                    {{ $event->getTitle() }} | {{ $stage->getTitle() }}
+                    {{ $event->title }} | {{ $stage->title }}
                 </a>
             </h3>
             <div class="mb-3">
-                {!! str($stage->getDescription())->stripHtmlTags()->truncate(200, '...') !!}
+                {!! str($stage->description)->stripHtmlTags()->truncate(200, '...') !!}
             </div>
 
             <div class="d-flex align-items-center gap-3 mb-2 mt-auto">
-                @if ($stage->getStartDate())
+                @if ($stage->startDate)
                     <div>
-                        開始: {{ $chronos->toLocalFormat($stage->getStartDate(), 'Y/m/d H:i') }}
+                        開始: {{ $chronos->toLocalFormat($stage->startDate, 'Y/m/d H:i') }}
                     </div>
                 @endif
 
-                @if ($stage->getEndDate())
+                @if ($stage->endDate)
                     <div>
-                        結束: {{ $chronos->toLocalFormat($stage->getEndDate(), 'Y/m/d H:i') }}
+                        結束: {{ $chronos->toLocalFormat($stage->endDate, 'Y/m/d H:i') }}
                     </div>
                 @endif
             </div>
@@ -76,17 +76,17 @@ $attributes->props(
             <div class="d-flex align-items-center gap-3 mb-2">
                 <div>
                     <i class="far fa-user"></i>
-                    {{ $stage->getQuota() }}
+                    {{ $stage->quota }}
                 </div>
 
                 @if ($category)
                     <div>
-                        <a href="{{ $nav->to('event_stage_list')->var('path', $category->getPath()) }}"
+                        <a href="{{ $nav->to('event_stage_list')->var('path', $category->path) }}"
                             class="link-secondary"
                             target="_blank"
                         >
                             <i class="far fa-folder"></i>
-                            {{ $category->getTitle() }}
+                            {{ $category->title }}
                         </a>
                     </div>
                 @endif

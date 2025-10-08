@@ -44,14 +44,14 @@ use Windwalker\ORM\ORM;
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
 
-$screenshots = $item->getScreenshots();
+$screenshots = $item->screenshots;
 
 $event = $vm->tryEntity(Event::class, $screenshots['event']);
 $stage = $vm->tryEntity(EventStage::class, $screenshots['stage']);
 
 
 $orm = $app->retrieve(ORM::class);
-$category = $orm->findOne(Category::class, $event->getId());
+$category = $orm->findOne(Category::class, $event->id);
 ?>
 
 @extends('global.body')
@@ -79,24 +79,24 @@ $category = $orm->findOne(Category::class, $event->getId());
                         </div>
 
                         <div class="text-center">
-                            <img src="{{ $stage->getCover() }}" class="img-fluid" style="max-width: 800px" alt="cover">
+                            <img src="{{ $stage->cover }}" class="img-fluid" style="max-width: 800px" alt="cover">
                         </div>
 
                         <header class="l-event-stage-header">
-                            <h2>{{ $event->getTitle() }} | {{ $stage->getTitle() }}</h2>
+                            <h2>{{ $event->title }} | {{ $stage->title }}</h2>
                         </header>
 
                         <aside>
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                @if ($stage->getStartDate())
+                                @if ($stage->startDate)
                                     <div>
-                                        開始: {{ $chronos->toLocalFormat($stage->getStartDate(), 'Y/m/d H:i') }}
+                                        開始: {{ $chronos->toLocalFormat($stage->startDate, 'Y/m/d H:i') }}
                                     </div>
                                 @endif
 
-                                @if ($stage->getEndDate())
+                                @if ($stage->endDate)
                                     <div>
-                                        結束: {{ $chronos->toLocalFormat($stage->getEndDate(), 'Y/m/d H:i') }}
+                                        結束: {{ $chronos->toLocalFormat($stage->endDate, 'Y/m/d H:i') }}
                                     </div>
                                 @endif
                             </div>
@@ -104,15 +104,15 @@ $category = $orm->findOne(Category::class, $event->getId());
                             <div class="d-flex align-items-center gap-3 mb-2">
                                 <div>
                                     <i class="far fa-user"></i>
-                                    {{ $stage->getQuota() }}
+                                    {{ $stage->quota }}
                                 </div>
 
                                 @if ($category)
                                     <div>
-                                        <a href="{{ $nav->to('event_stage_list')->var('path', $category->getPath()) }}"
+                                        <a href="{{ $nav->to('event_stage_list')->var('path', $category->path) }}"
                                             class="link-secondary">
                                             <i class="far fa-folder"></i>
-                                            {{ $category->getTitle() }}
+                                            {{ $category->title }}
                                         </a>
                                     </div>
                                 @endif
@@ -120,11 +120,11 @@ $category = $orm->findOne(Category::class, $event->getId());
                         </aside>
 
                         <div>
-                            {!! $event->getDescription() !!}
+                            {!! $event->description !!}
                         </div>
 
                         <div>
-                            {!! $stage->getDescription() !!}
+                            {!! $stage->description !!}
                         </div>
                     </div>
 

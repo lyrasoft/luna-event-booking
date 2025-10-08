@@ -51,7 +51,7 @@ class MyEventListView implements ViewModelInterface
 
         $items = $this->repository->getFrontListSelector()
             ->addFilters([])
-            ->where('event_order.user_id', $user->getId())
+            ->where('event_order.user_id', $user->id)
             ->where(
                 'event_order.state',
                 EventOrderState::DONE

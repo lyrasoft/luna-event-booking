@@ -50,7 +50,7 @@ class EventAttendingView implements ViewModelInterface
         $stageId = $app->input('stageId');
 
         $stage = $this->orm->mustFindOne(EventStage::class, $stageId);
-        $event = $this->orm->mustFindOne(Event::class, $stage->getEventId());
+        $event = $this->orm->mustFindOne(Event::class, $stage->eventId);
 
         [, , $category] = $this->eventViewService->checkEventAndStageAvailable($event, $stage);
 
@@ -62,8 +62,8 @@ class EventAttendingView implements ViewModelInterface
             ->fillTo('order', $attendingStore->getOrderData());
 
         if ($user->isLogin()) {
-            $form['order/name']->setValue($user->getName());
-            $form['order/email']->setValue($user->getEmail());
+            $form['order/name']->setValue($user->name);
+            $form['order/email']->setValue($user->email);
         }
 
         return compact(

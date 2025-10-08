@@ -32,7 +32,7 @@ class EventViewService
             $stage = $this->orm->mustFindOne(EventStage::class, $stage);
         }
 
-        $event = $this->orm->mustFindOne(Event::class, $stage->getEventId());
+        $event = $this->orm->mustFindOne(Event::class, $stage->eventId);
 
         [$event, $category] = $this->checkEventAvailable($event);
         $stage = $this->checkStageSelfAvailable($stage);
@@ -61,25 +61,25 @@ class EventViewService
      */
     public function checkEventAvailable(Event $event): array
     {
-        if (!$event->getState()->isPublished()) {
+        if (!$event->state->isPublished()) {
             throw new RouteNotFoundException('Event not found.');
         }
 
-        if ($event->getPublishUp() && $event->getPublishUp()->isFuture()) {
+        if ($event->publishUp && $event->publishUp->isFuture()) {
             throw new RouteNotFoundException('Event not started.');
         }
 
-        if ($event->getEndDate() && $event->getEndDate()->isPast()) {
+        if ($event->endDate && $event->endDate->isPast()) {
             throw new RouteNotFoundException('Event was ended.');
         }
 
         $category = null;
 
         /** @var ?Category $category */
-        if ($event->getCategoryId()) {
-            $category = $this->getCategory($event->getCategoryId());
+        if ($event->categoryId) {
+            $category = $this->getCategory($event->categoryId);
 
-            if ($category && !$category->getState()->isPublished()) {
+            if ($category && !$category->state->isPublished()) {
                 throw new RouteNotFoundException('Category not published.');
             }
         }
@@ -89,15 +89,15 @@ class EventViewService
 
     public function checkStageSelfAvailable(EventStage $stage): EventStage
     {
-        if (!$stage->getState()->isPublished()) {
+        if (!$stage->state->isPublished()) {
             throw new RouteNotFoundException('Event Stage not found.');
         }
 
-        if ($stage->getPublishUp() && $stage->getPublishUp()->isFuture()) {
+        if ($stage->publishUp && $stage->publishUp->isFuture()) {
             throw new RouteNotFoundException('Event Stage not started.');
         }
 
-        if ($stage->getEndDate() && $stage->getEndDate()->isPast()) {
+        if ($stage->endDate && $stage->endDate->isPast()) {
             throw new RouteNotFoundException('Event Stage was ended.');
         }
 

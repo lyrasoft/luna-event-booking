@@ -78,7 +78,7 @@ class EventStageEditView implements ViewModelInterface
         $htmlFrame->setTitle(
             $this->trans(
                 'event.edit.heading',
-                event: $event->getTitle(),
+                event: $event->title,
                 title: $this->trans('unicorn.title.edit', title: '梯次')
             )
         );

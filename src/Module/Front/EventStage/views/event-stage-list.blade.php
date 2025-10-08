@@ -53,44 +53,44 @@ use function Windwalker\str;
                         <div class="card-title">
                             <a href="{{ $item->makeLink($nav) }}">
                                 <h4>
-                                    {{ $event->getTitle() }} | {{ $item->getTitle() }}
+                                    {{ $event->title }} | {{ $item->title }}
                                 </h4>
                             </a>
                         </div>
 
                         <div class="d-flex align-items-center gap-3 mb-2">
-                            @if ($item->getStartDate())
+                            @if ($item->startDate)
                                 <div>
-                                    開始: {{ $chronos->toLocalFormat($item->getStartDate(), 'Y/m/d H:i') }}
+                                    開始: {{ $chronos->toLocalFormat($item->startDate, 'Y/m/d H:i') }}
                                 </div>
                             @endif
 
-                            @if ($item->getEndDate())
+                            @if ($item->endDate)
                                 <div>
-                                    結束: {{ $chronos->toLocalFormat($item->getEndDate(), 'Y/m/d H:i') }}
+                                    結束: {{ $chronos->toLocalFormat($item->endDate, 'Y/m/d H:i') }}
                                 </div>
-                            @endif
+                                @endif
                         </div>
 
                         <div class="d-flex align-items-center gap-3 mb-2">
                             <div>
                                 <i class="far fa-user"></i>
-                                {{ $item->getQuota() }}
+                                {{ $item->quota }}
                             </div>
 
                             @if ($category)
                                 <div>
-                                    <a href="{{ $nav->to('event_stage_list')->var('path', $category->getPath()) }}"
+                                    <a href="{{ $nav->to('event_stage_list')->var('path', $category->path) }}"
                                         class="link-secondary">
                                         <i class="far fa-folder"></i>
-                                        {{ $category->getTitle() }}
+                                        {{ $category->title }}
                                     </a>
                                 </div>
                             @endif
                         </div>
 
                         <div>
-                            {!! str($item->getDescription())->stripHtmlTags()->truncate(150, '...') !!}
+                            {!! str($item->description)->stripHtmlTags()->truncate(150, '...') !!}
                         </div>
 
                         <div class="mt-3">

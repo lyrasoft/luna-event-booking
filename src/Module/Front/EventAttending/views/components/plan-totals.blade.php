@@ -61,7 +61,7 @@ $grandTotal = $store->getTotals()->get('grand_total');
         @foreach ($store->getAttendingPlans() as $plan)
             <tr>
                 <td>
-                    {{ $plan->getPlan()->getTitle() }}
+                    {{ $plan->getPlan()->title }}
                 </td>
                 <td class="text-end">
                     {{ $priceFormatter->format($plan->getPrice()) }}

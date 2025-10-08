@@ -39,7 +39,7 @@ use Windwalker\Form\Form;
 @stop
 
 @section('content')
-    <x-event-edit-nav :event-id="$item?->getId()"></x-event-edit-nav>
+    <x-event-edit-nav :event-id="$item?->id"></x-event-edit-nav>
 
     <form name="admin-form" id="admin-form"
         uni-form-validate='{"scroll": true}'
