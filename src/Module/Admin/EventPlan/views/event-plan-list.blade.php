@@ -151,7 +151,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                         {{ $item->title }}
                                     </a>
 
-                                    @if ($item->isRequireValidate())
+                                    @if ($item->requireValidate)
                                         <i class="far fa-shield-check"
                                             data-bs-toggle="tooltip"
                                             title="需要審核"

@@ -32,40 +32,4 @@ class EventMemberMap implements EntityInterface
     {
         //
     }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getMemberId(): int
-    {
-        return $this->memberId;
-    }
-
-    public function setMemberId(int $memberId): static
-    {
-        $this->memberId = $memberId;
-
-        return $this;
-    }
-
-    public function getTargetId(): int
-    {
-        return $this->targetId;
-    }
-
-    public function setTargetId(int $targetId): static
-    {
-        $this->targetId = $targetId;
-
-        return $this;
-    }
 }

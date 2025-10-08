@@ -218,7 +218,7 @@ $workflow = $app->service(EventAttendStateWorkflow::class);
 
                         {{-- Alt --}}
                         <td>
-                            @if ($item->isAlternate())
+                            @if ($item->alternate)
                                 <i class="far fa-check"></i>
                             @else
                                 -

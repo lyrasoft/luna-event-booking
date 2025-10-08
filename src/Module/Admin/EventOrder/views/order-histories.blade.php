@@ -50,7 +50,7 @@ $attributes = $attributes->class('list-group');
                     {{ $chronos->toLocalFormat($history->getCreated()) }}
                 </div>
 
-                @if ($history->isNotify())
+                @if ($history->notify)
                     <div class="c-order-history__info-item ms-2">
                     <span class="fa fa-envelope"
                         data-bs-toggle="tooltip"

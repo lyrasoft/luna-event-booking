@@ -129,9 +129,9 @@ class EventStage implements EntityInterface
     #[BeforeCopyEvent]
     public static function beforeCopy(BeforeCopyEvent $event): void
     {
-        $data = &$event->getData();
+        $data = &$event->data;
 
-        $mapper = $event->getEntityMapper();
+        $mapper = $event->entityMapper;
 
         while ($mapper->findOne(['title' => $data['title'], 'event_id' => $data['event_id']])) {
             $data['title'] = Str::increment($data['title'], '%s %d');
@@ -148,16 +148,17 @@ class EventStage implements EntityInterface
     #[AfterCopyEvent]
     public static function afterCopy(AfterCopyEvent $event): void
     {
-        $old = $event->getOldEntity();
+        $old = $event->oldEntity;
 
         /** @var static $item */
-        $item = $event->getEntity();
-        $orm = $event->getORM();
+        $item = $event->entity;
+        /** @var static $old */
+        $orm = $event->orm;
 
         $orm->copy(
             EventPlan::class,
             [
-                'stage_id' => $old?->getId(),
+                'stage_id' => $old?->id,
             ],
             [
                 'stage_id' => $item->id,
@@ -168,281 +169,5 @@ class EventStage implements EntityInterface
     public function makeLink(Navigator $nav): RouteUri
     {
         return $nav->to('front::event_stage_item')->id($this->id)->alias($this->alias);
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getEventId(): int
-    {
-        return $this->eventId;
-    }
-
-    public function setEventId(int $eventId): static
-    {
-        $this->eventId = $eventId;
-
-        return $this;
-    }
-
-    public function getVenueId(): int
-    {
-        return $this->venueId;
-    }
-
-    public function setVenueId(int $venueId): static
-    {
-        $this->venueId = $venueId;
-
-        return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getAlias(): string
-    {
-        return $this->alias;
-    }
-
-    public function setAlias(string $alias): static
-    {
-        $this->alias = $alias;
-
-        return $this;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getAttendUrl(): string
-    {
-        return $this->attendUrl;
-    }
-
-    public function setAttendUrl(string $attendUrl): static
-    {
-        $this->attendUrl = $attendUrl;
-
-        return $this;
-    }
-
-    public function getQuota(): ?int
-    {
-        return $this->quota;
-    }
-
-    public function setQuota(?int $quota): static
-    {
-        $this->quota = $quota;
-
-        return $this;
-    }
-
-    public function getAlternate(): ?int
-    {
-        return $this->alternate;
-    }
-
-    public function setAlternate(?int $alternate): static
-    {
-        $this->alternate = $alternate;
-
-        return $this;
-    }
-
-    public function getLess(): ?int
-    {
-        return $this->less;
-    }
-
-    public function setLess(?int $less): static
-    {
-        $this->less = $less;
-
-        return $this;
-    }
-
-    public function getState(): BasicState
-    {
-        return $this->state;
-    }
-
-    public function setState(int|BasicState $state): static
-    {
-        $this->state = BasicState::wrap($state);
-
-        return $this;
-    }
-
-    public function getOrdering(): int
-    {
-        return $this->ordering;
-    }
-
-    public function setOrdering(int $ordering): static
-    {
-        $this->ordering = $ordering;
-
-        return $this;
-    }
-
-    public function getStartDate(): ?Chronos
-    {
-        return $this->startDate;
-    }
-
-    public function setStartDate(DateTimeInterface|string|null $startDate): static
-    {
-        $this->startDate = Chronos::tryWrap($startDate);
-
-        return $this;
-    }
-
-    public function getEndDate(): ?Chronos
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(DateTimeInterface|string|null $endDate): static
-    {
-        $this->endDate = Chronos::tryWrap($endDate);
-
-        return $this;
-    }
-
-    public function getCreated(): ?Chronos
-    {
-        return $this->created;
-    }
-
-    public function setCreated(DateTimeInterface|string|null $created): static
-    {
-        $this->created = Chronos::tryWrap($created);
-
-        return $this;
-    }
-
-    public function getModified(): ?Chronos
-    {
-        return $this->modified;
-    }
-
-    public function setModified(DateTimeInterface|string|null $modified): static
-    {
-        $this->modified = Chronos::tryWrap($modified);
-
-        return $this;
-    }
-
-    public function getCreatedBy(): int
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(int $createdBy): static
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getModifiedBy(): int
-    {
-        return $this->modifiedBy;
-    }
-
-    public function setModifiedBy(int $modifiedBy): static
-    {
-        $this->modifiedBy = $modifiedBy;
-
-        return $this;
-    }
-
-    public function getParams(): array
-    {
-        return $this->params;
-    }
-
-    public function setParams(array $params): static
-    {
-        $this->params = $params;
-
-        return $this;
-    }
-
-    public function getAttends(): int
-    {
-        return $this->attends;
-    }
-
-    public function setAttends(int $attends): static
-    {
-        $this->attends = $attends;
-
-        return $this;
-    }
-
-    public function getPublishUp(): ?Chronos
-    {
-        return $this->publishUp;
-    }
-
-    public function setPublishUp(\DateTimeInterface|string|null $publishUp): static
-    {
-        $this->publishUp = Chronos::tryWrap($publishUp);
-
-        return $this;
-    }
-
-    public function getCover(): string
-    {
-        return $this->cover;
-    }
-
-    public function setCover(string $cover): static
-    {
-        $this->cover = $cover;
-
-        return $this;
-    }
-
-    public function getImages(): array
-    {
-        return $this->images;
-    }
-
-    public function setImages(array $images): static
-    {
-        $this->images = $images;
-
-        return $this;
     }
 }

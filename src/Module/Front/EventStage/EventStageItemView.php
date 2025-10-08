@@ -15,6 +15,7 @@ use Windwalker\Core\Attributes\ViewMetadata;
 use Windwalker\Core\Attributes\ViewModel;
 use Windwalker\Core\Html\HtmlFrame;
 use Windwalker\Core\Http\Browser;
+use Windwalker\Core\Http\BrowserNext;
 use Windwalker\Core\View\View;
 use Windwalker\Core\View\ViewModelInterface;
 use Windwalker\DI\Attributes\Autowire;
@@ -58,7 +59,7 @@ class EventStageItemView implements ViewModelInterface
         [, , $category] = $this->eventViewService->checkEventAndStageAvailable($event, $item);
 
         // Keep URL unique
-        if (($item->alias !== $alias) && !$app->retrieve(Browser::class)->isRobot()) {
+        if (($item->alias !== $alias) && !$app->retrieve(BrowserNext::class)->isRobot()) {
             return $app->getNav()->self()->alias($item->alias);
         }
 
