@@ -6,18 +6,18 @@ namespace Lyrasoft\EventBooking\Field;
 
 use Lyrasoft\EventBooking\Entity\Venue;
 use Unicorn\Field\SqlListField;
-use Windwalker\DOM\DOMElement;
+use Windwalker\DOM\HTMLElement;
 
 class VenueListField extends SqlListField
 {
     protected ?string $table = Venue::class;
 
     /**
-     * @param  DOMElement  $input
+     * @param  HTMLElement  $input
      *
-     * @return  DOMElement
+     * @return  HTMLElement
      */
-    public function prepareInput(DOMElement $input): DOMElement
+    public function prepareInput(HTMLElement $input): HTMLElement
     {
         return $input;
     }
