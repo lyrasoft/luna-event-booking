@@ -38,7 +38,7 @@ static fn() => [
                 5
             );
         },
-        'initial_state' => static fn(EventOrder $order, EventAttend $attend) => AttendState::PENDING,
+        'initial_state' => static fn(EventOrder $order) => EventOrderState::UNPAID,
     ],
 
     'attends' => [
@@ -49,7 +49,7 @@ static fn() => [
                 6
             );
         },
-        'initial_state' => static fn(EventOrder $order) => EventOrderState::UNPAID,
+        'initial_state' => static fn(EventOrder $order, EventAttend $attend) => AttendState::PENDING,
     ],
 
     'invoice' => [
