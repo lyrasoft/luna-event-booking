@@ -40,7 +40,7 @@ class EventCheckoutService
     {
         $order = $store->getOrder() ?? throw new \RuntimeException('Missing order to checkout');
 
-        $order = $this->prepareInitialOrderState($order);
+        $order = $this->prepareInitialOrderState($order, $store);
 
         /** @var EventOrder $order */
         $order = $this->orm->createOne($order);
@@ -52,7 +52,7 @@ class EventCheckoutService
         $attends = $store->getAllAttendEntities();
 
         foreach ($attends as $i => $attend) {
-            $attend = $this->prepareEventAttend($order, $attend);
+            $attend = $this->prepareEventAttend($order, $attend, $store);
 
             /** @var EventAttend $attend */
             $attend = $this->orm->createOne($attend);
@@ -69,7 +69,7 @@ class EventCheckoutService
         return [$order, $attends];
     }
 
-    public function prepareInitialOrderState(EventOrder $order): EventOrder
+    public function prepareInitialOrderState(EventOrder $order, EventAttendingStore $store): EventOrder
     {
         // Todo: Handle Alternates
 
@@ -87,7 +87,7 @@ class EventCheckoutService
         return $order;
     }
 
-    public function prepareEventAttend(EventOrder $order, EventAttend $attend): EventAttend
+    public function prepareEventAttend(EventOrder $order, EventAttend $attend, EventAttendingStore $store): EventAttend
     {
         $attend->orderId = $order->id;
         $attend->state = $this->attendeeService->getInitialState($order, $attend);

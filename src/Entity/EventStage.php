@@ -134,6 +134,10 @@ class EventStage implements EntityInterface
     #[Cast(JsonCast::class)]
     public array $params = [];
 
+    public int $quotaAndAlternate {
+        get => ($this->quota ?? 0) + ($this->alternate ?? 0);
+    }
+
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void
     {

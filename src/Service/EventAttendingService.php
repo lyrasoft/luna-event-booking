@@ -173,7 +173,13 @@ class EventAttendingService
 
         // Check stage quota
         // Todo: Handle Alternate
-        if ($stage->quota < ($stage->attends + $store->getTotalQuantity())) {
+        $quota = $stage->quota;
+
+        if ($stage->alternate) {
+            $quota += $stage->alternate;
+        }
+
+        if ($quota < ($stage->attends + $store->getTotalQuantity())) {
             throw new ValidateFailException('活動名額已滿');
         }
 
