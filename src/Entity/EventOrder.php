@@ -68,6 +68,7 @@ class EventOrder implements EntityInterface
     #[Cast(InvoiceData::class)]
     public InvoiceData $invoiceData {
         set(InvoiceData|array|null $value) => $this->invoiceData = InvoiceData::wrap($value);
+        get => $this->invoiceData ??= new InvoiceData();
     }
 
     #[Column('total')]
@@ -80,6 +81,7 @@ class EventOrder implements EntityInterface
     #[Cast(EventOrderTotals::class)]
     public EventOrderTotals $totals {
         set(EventOrderTotals|array|null $value) => $this->totals = EventOrderTotals::wrap($value);
+        get => $this->totals ??= new EventOrderTotals();
     }
 
     #[Column('name')]
@@ -109,6 +111,7 @@ class EventOrder implements EntityInterface
     #[Cast(EventOrderHistories::class)]
     public EventOrderHistories $histories {
         set(EventOrderHistories|array|null $value) => $this->histories = EventOrderHistories::wrap($value);
+        get => $this->histories ??= new EventOrderHistories();
     }
 
     #[Column('state')]
