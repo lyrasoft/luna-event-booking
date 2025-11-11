@@ -56,7 +56,7 @@ $attributes->props(
 
         <tr class="">
             <th>發票編號</th>
-            <td>{{ $item->invoiceData->getNo() }}</td>
+            <td>{{ $item->invoiceData->no }}</td>
         </tr>
 
         <tr class="">

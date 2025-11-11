@@ -44,20 +44,20 @@ $i = 0;
 <div class="l-attendee-form">
     <h3 class="mb-3">報名者資料</h3>
 
-    @foreach ($store->getAttendingPlans() as $plan)
-        @if (!$plan->getQuantity())
+    @foreach ($store->attendingPlans as $plan)
+        @if (!$plan->quantity)
             @continue
         @endif
 
         <div class="mb-4">
-            <h4>方案: {{ $plan->getPlan()->title }}</h4>
+            <h4>方案: {{ $plan->plan->title }}</h4>
 
-            @foreach (range(1, $plan->getQuantity()) as $k)
+            @foreach (range(1, $plan->quantity) as $k)
                 @php
-                    $attend = $plan->getAttends()[$k - 1] ?? [];
+                    $attend = $plan->attends[$k - 1] ?? [];
                     $i++;
                     $uid = $attend['uid'] ?? tid();
-                    $pid = $plan->getPlan()->id;
+                    $pid = $plan->plan->id;
                     $fieldNamePrefix = "attends[$pid][$uid]";
                 @endphp
                 <div>
@@ -137,7 +137,7 @@ $i = 0;
                     <div class="d-none">
                         <input type="hidden" name="{{ $fieldNamePrefix }}[uid]" value="{{ $uid }}" />
                         <input type="hidden" name="{{ $fieldNamePrefix }}[plan_id]"
-                            value="{{ $plan->getPlan()->id }}" />
+                            value="{{ $plan->plan->id }}" />
                     </div>
                 </div>
             @endforeach

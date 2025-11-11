@@ -149,7 +149,7 @@ return new /** 2024070509030001_EventInit */ class extends AbstractMigration {
                 $schema->datetime('expired_at');
                 $schema->datetime('paid_at');
                 $schema->datetime('done_at');
-                $schema->json('screenshots')->nullable(true);
+                $schema->json('snapshots')->nullable(true);
                 $schema->datetime('created');
                 $schema->datetime('modified');
                 $schema->integer('created_by');
@@ -182,7 +182,7 @@ return new /** 2024070509030001_EventInit */ class extends AbstractMigration {
                 $schema->varchar('phone');
                 $schema->varchar('address');
                 $schema->json('details')->nullable(true);
-                $schema->json('screenshots')->nullable(true);
+                $schema->json('snapshots')->nullable(true);
                 $schema->varchar('state')->comment('AttendState: pending, checked_in');
                 $schema->datetime('checked_in_at');
                 $schema->bool('alternate');

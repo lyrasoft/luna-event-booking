@@ -50,7 +50,7 @@ class EventAttendingController
         $storage = $eventAttendingService->getAttendingStore($stage);
 
         // Is empty
-        if ($storage->getTotalQuantity() === 0) {
+        if ($storage->totalQuantity === 0) {
             $app->addMessage('沒有報名資訊', 'warning');
 
             return $app->getNav()->back();
@@ -100,12 +100,12 @@ class EventAttendingController
             ) {
                 $store = $eventAttendingService->getAttendingStore($stage->id, true);
 
-                $stage = $store->getStage();
+                $stage = $store->stage;
 
                 $user = $userService->getUser();
 
                 // Order
-                $orderData = $store->getOrderData();
+                $orderData = $store->orderData;
 
                 $order = new EventOrder();
 
@@ -118,7 +118,7 @@ class EventAttendingController
                 $order->invoiceType = $orderData['invoice_type'];
                 $order->invoiceData = $orderData['invoice_data'];
                 $order->total = $store->getGrandTotal()->toFloat();
-                $order->totals = clone $store->getTotals();
+                $order->totals = clone $store->totals;
                 $order->name = $orderData['name'] ?? '';
                 $order->email = $orderData['email'] ?? '';
                 $order->nick = $orderData['nick'] ?? '';
@@ -127,16 +127,16 @@ class EventAttendingController
                 $order->address = $orderData['address'] ?? '';
                 $order->details = $orderData['details'] ?? [];
                 $order->payment = 'atm';
-                $order->screenshots = compact('event', 'stage');
+                $order->snapshots = compact('event', 'stage');
                 $order->attends = count($store->getAllAttends());
 
-                $store->setOrder($order);
+                $store->order = $order;
 
                 // Prepare Attends
-                foreach ($store->getAttendingPlans() as $attendingPlan) {
-                    $attends = $attendingPlan->getAttends();
+                foreach ($store->attendingPlans as $attendingPlan) {
+                    $attends = $attendingPlan->attends;
                     $attendEntities = [];
-                    $plan = $attendingPlan->getPlan();
+                    $plan = $attendingPlan->plan;
 
                     foreach ($attends as $attendData) {
                         $attend = new EventAttend();
@@ -152,7 +152,7 @@ class EventAttendingController
                         $attend->phone = $attendData['phone'] ?? '';
                         $attend->address = $attendData['address'] ?? '';
                         $attend->details = $attendData['details'] ?? [];
-                        $attend->screenshots = [
+                        $attend->snapshots = [
                             'plan' => $plan,
                         ];
 
@@ -170,7 +170,7 @@ class EventAttendingController
 
         // Todo: Event
 
-        $order = $store->getOrder();
+        $order = $store->order;
         $orderUri = $app->getNav()->to('event_order_item')->var('no', $order->no);
 
         try {

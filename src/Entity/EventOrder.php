@@ -151,9 +151,9 @@ class EventOrder implements EntityInterface
         set(\DateTimeInterface|string|null $value) => $this->doneAt = Chronos::tryWrap($value);
     }
 
-    #[Column('screenshots')]
+    #[Column('snapshots')]
     #[Cast(JsonCast::class)]
-    public array $screenshots = [];
+    public array $snapshots = [];
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]

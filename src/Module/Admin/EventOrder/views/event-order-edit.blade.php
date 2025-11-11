@@ -42,10 +42,10 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
 
 $alert = $item->params['alert'] ?? [];
 
-$screenshots = $item->screenshots;
+$snapshots = $item->snapshots;
 
-$event = $vm->tryEntity(Event::class, $screenshots['event']);
-$stage = $vm->tryEntity(EventStage::class, $screenshots['stage']);
+$event = $vm->tryEntity(Event::class, $snapshots['event']);
+$stage = $vm->tryEntity(EventStage::class, $snapshots['stage']);
 
 $histories = $item->histories;
 ?>
@@ -105,10 +105,10 @@ $histories = $item->histories;
                     @foreach ($totals as $total)
                         <div class="d-flex justify-content-end align-items-center">
                             <div>
-                                <strong>{{ $total->getTitle() }}</strong>
+                                <strong>{{ $total->title }}</strong>
                             </div>
                             <div class="text-end fs-4 fw-bold" style="min-width: 150px">
-                                {{ $priceFormatter->format($total->getValue()) }}
+                                {{ $priceFormatter->format($total->value) }}
                             </div>
                         </div>
                     @endforeach

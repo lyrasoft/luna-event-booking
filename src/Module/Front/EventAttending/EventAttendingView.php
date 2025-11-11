@@ -59,7 +59,7 @@ class EventAttendingView implements ViewModelInterface
         $user = $this->userService->getUser();
 
         $form = $this->formFactory->create(EventAttendingForm::class)
-            ->fillTo('order', $attendingStore->getOrderData());
+            ->fillTo('order', $attendingStore->orderData);
 
         if ($user->isLogin()) {
             $form['order/name']->setValue($user->name);

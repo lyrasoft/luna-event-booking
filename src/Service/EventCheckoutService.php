@@ -38,7 +38,7 @@ class EventCheckoutService
      */
     public function processOrderAndSave(EventAttendingStore $store): array
     {
-        $order = $store->getOrder() ?? throw new \RuntimeException('Missing order to checkout');
+        $order = $store->order ?? throw new \RuntimeException('Missing order to checkout');
 
         $order = $this->prepareInitialOrderState($order, $store);
 
@@ -49,7 +49,7 @@ class EventCheckoutService
 
         $this->orm->updateOne($order);
 
-        $attends = $store->getAllAttendEntities();
+        $attends = $store->allAttendEntities;
 
         foreach ($attends as $i => $attend) {
             $attend = $this->prepareEventAttend($order, $attend, $store);
@@ -64,7 +64,7 @@ class EventCheckoutService
             $attends[$i] = $attend;
         }
 
-        $store->setOrder($order);
+        $store->order = $order;
 
         return [$order, $attends];
     }
@@ -97,7 +97,7 @@ class EventCheckoutService
 
     public function processPayment(EventAttendingStore $store): mixed
     {
-        $order = $store->getOrder();
+        $order = $store->order;
 
         if (!$order) {
             throw new \RuntimeException('Order not found in attending store.');

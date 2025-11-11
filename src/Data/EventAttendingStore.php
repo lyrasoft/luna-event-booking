@@ -9,32 +9,26 @@ use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
 use Lyrasoft\EventBooking\Entity\EventStage;
 use Windwalker\Data\Collection;
+use Windwalker\Data\RecordInterface;
+use Windwalker\Data\RecordTrait;
 use Windwalker\Data\ValueObject;
 
 use function Windwalker\collect;
 
-class EventAttendingStore extends ValueObject
+class EventAttendingStore implements RecordInterface
 {
-    public array $orderData = [];
+    use RecordTrait;
 
-    public ?EventOrder $order = null;
-
-    public EventStage $stage;
-
-    public EventOrderTotals $totals;
-
-    public array $attendingPlans = [];
-
-    public function getTotals(): EventOrderTotals
-    {
-        return $this->totals ??= new EventOrderTotals();
-    }
-
-    public function setTotals(EventOrderTotals|array $totals): static
-    {
-        $this->totals = EventOrderTotals::wrap($totals);
-
-        return $this;
+    public function __construct(
+        public array $orderData = [],
+        public ?EventOrder $order = null,
+        public EventStage $stage,
+        public EventOrderTotals $totals {
+            get => $this->totals ??= new EventOrderTotals();
+            set(EventOrderTotals|iterable $value) => EventOrderTotals::wrap($value);
+        },
+        public array $attendingPlans = [],
+    ) {
     }
 
     /**
@@ -59,8 +53,8 @@ class EventAttendingStore extends ValueObject
     {
         $attends = collect();
 
-        foreach ($this->getAttendingPlans() as $attendingPlan) {
-            $attends = $attends->append(...$attendingPlan->getAttends());
+        foreach ($this->attendingPlans as $attendingPlan) {
+            $attends = $attends->append(...$attendingPlan->attends);
         }
 
         return $attends;
@@ -73,8 +67,8 @@ class EventAttendingStore extends ValueObject
     {
         $attends = collect();
 
-        foreach ($this->getAttendingPlans() as $attendingPlan) {
-            $attends = $attends->append(...$attendingPlan->getAttendEntities());
+        foreach ($this->attendingPlans as $attendingPlan) {
+            $attends = $attends->append(...$attendingPlan->attendEntities);
         }
 
         return $attends;
@@ -84,8 +78,8 @@ class EventAttendingStore extends ValueObject
     {
         $qty = 0;
 
-        foreach ($this->getAttendingPlans() as $attendingPlan) {
-            $qty += $attendingPlan->getQuantity();
+        foreach ($this->attendingPlans as $attendingPlan) {
+            $qty += $attendingPlan->quantity;
         }
 
         return $qty;
@@ -95,46 +89,10 @@ class EventAttendingStore extends ValueObject
     {
         $gt = BigDecimal::zero();
 
-        foreach ($this->getAttendingPlans() as $attendingPlan) {
-            $gt = $gt->plus($attendingPlan->getTotal());
+        foreach ($this->attendingPlans as $attendingPlan) {
+            $gt = $gt->plus($attendingPlan->total);
         }
 
         return $gt;
-    }
-
-    public function getOrderData(): array
-    {
-        return $this->orderData;
-    }
-
-    public function setOrderData(array $orderData): static
-    {
-        $this->orderData = $orderData;
-
-        return $this;
-    }
-
-    public function getOrder(): ?EventOrder
-    {
-        return $this->order;
-    }
-
-    public function setOrder(?EventOrder $order): static
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
-    public function getStage(): EventStage
-    {
-        return $this->stage;
-    }
-
-    public function setStage(EventStage $stage): static
-    {
-        $this->stage = $stage;
-
-        return $this;
     }
 }

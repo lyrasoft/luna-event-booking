@@ -34,7 +34,7 @@ class EcpayPayment implements EventPaymentInterface
     public function process(EventAttendingStore $store): mixed
     {
         /** @var EventOrder $order */
-        $order = $store->getOrder();
+        $order = $store->order;
 
         $order->transactionNo = $this->createTransactionNo($order);
 

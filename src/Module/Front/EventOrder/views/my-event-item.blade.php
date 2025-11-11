@@ -44,10 +44,10 @@ use Windwalker\ORM\ORM;
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
 
-$screenshots = $item->screenshots;
+$snapshots = $item->snapshots;
 
-$event = $vm->tryEntity(Event::class, $screenshots['event']);
-$stage = $vm->tryEntity(EventStage::class, $screenshots['stage']);
+$event = $vm->tryEntity(Event::class, $snapshots['event']);
+$stage = $vm->tryEntity(EventStage::class, $snapshots['stage']);
 
 
 $orm = $app->retrieve(ORM::class);

@@ -47,7 +47,7 @@ $attributes = $attributes->class('list-group');
             <div class="c-order-history__info d-flex text-muted mb-2">
                 <div class="c-order-history__info-item mr-2">
                     <span class="fa fa-calendar"></span>
-                    {{ $chronos->toLocalFormat($history->getCreated()) }}
+                    {{ $chronos->toLocalFormat($history->created) }}
                 </div>
 
                 @if ($history->notify)
@@ -59,23 +59,23 @@ $attributes = $attributes->class('list-group');
                 @endif
             </div>
             <div class="c-order-history__title">
-                {{ $history->getType()->trans($lang) }}
+                {{ $history->type->trans($lang) }}
 
-                @if ($history->getType() !== OrderHistoryType::SYSTEM && $history->getUserId())
-                    <a href="{{ $nav->to('user_edit', ['id' => $history->getUserId() ?: 0]) }}">
-                        {{ $history->getUserName() }}
+                @if ($history->type !== OrderHistoryType::SYSTEM && $history->userId)
+                    <a href="{{ $nav->to('user_edit', ['id' => $history->userId ?: 0]) }}">
+                        {{ $history->userName }}
                     </a>
                 @endif
 
-                @if ($history->getState())
+                @if ($history->state)
                     @lang('event.order.history.action.changed.to')
-                    <span class="badge bg-{{ $history->getState()->getColor() }}">
-                    {{ $history->getStateText() }}
+                    <span class="badge bg-{{ $history->state->getColor() }}">
+                    {{ $history->stateText }}
                 </span>
                 @endif
 
-                @if (trim($history->getMessage()) !== '')
-                    @if ($history->getState())
+                @if (trim($history->message) !== '')
+                    @if ($history->state)
                         @lang('event.order.history.action.and.comments')
                     @else
                         @lang('event.order.history.action.comments')
@@ -83,9 +83,9 @@ $attributes = $attributes->class('list-group');
                 @endif
             </div>
 
-            @if (trim($history->getMessage()) !== '')
+            @if (trim($history->message) !== '')
                 <div class="c-order-history__message p-2 bg-light mt-2">
-                    {!! html_escape($history->getMessage(), true) !!}
+                    {!! html_escape($history->message, true) !!}
                 </div>
             @endif
         </div>

@@ -41,7 +41,7 @@ $attributes->props(
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
 
-$grandTotal = $store->getTotals()->get('grand_total');
+$grandTotal = $store->totals->get('grand_total');
 ?>
 
 <div class="l-plan-totals">
@@ -58,19 +58,19 @@ $grandTotal = $store->getTotals()->get('grand_total');
         </thead>
 
         <tbody>
-        @foreach ($store->getAttendingPlans() as $plan)
+        @foreach ($store->attendingPlans as $plan)
             <tr>
                 <td>
-                    {{ $plan->getPlan()->title }}
+                    {{ $plan->plan->title }}
                 </td>
                 <td class="text-end">
-                    {{ $priceFormatter->format($plan->getPrice()) }}
+                    {{ $priceFormatter->format($plan->price) }}
                 </td>
                 <td class="text-end">
-                    {{ (int) $plan->getQuantity() }}
+                    {{ (int) $plan->quantity }}
                 </td>
                 <td class="text-end">
-                    {{ $priceFormatter->format($plan->getTotal()) }}
+                    {{ $priceFormatter->format($plan->total) }}
                 </td>
             </tr>
         @endforeach
@@ -80,10 +80,10 @@ $grandTotal = $store->getTotals()->get('grand_total');
             <td colspan="20">
                 <div class="d-flex justify-content-end align-items-center fs-4">
                     <div class="text-end">
-                        {{ $grandTotal->getTitle() }}
+                        {{ $grandTotal->title }}
                     </div>
                     <div class="text-end" style="min-width: 150px">
-                        {{ $priceFormatter->format($grandTotal->getValue()) }}
+                        {{ $priceFormatter->format($grandTotal->value) }}
                     </div>
                 </div>
             </td>

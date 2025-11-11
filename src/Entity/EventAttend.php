@@ -82,9 +82,9 @@ class EventAttend implements EntityInterface
     #[Cast(JsonCast::class)]
     public array $details = [];
 
-    #[Column('screenshots')]
+    #[Column('snapshots')]
     #[Cast(JsonCast::class)]
-    public array $screenshots = [];
+    public array $snapshots = [];
 
     #[Column('state')]
     #[Cast(AttendState::class)]

@@ -138,10 +138,10 @@ class EventAttendingService
 
         $store = new EventAttendingStore();
 
-        $store->setStage($stage);
-        $store->setOrderData($data['order'] ?? []);
+        $store->stage = $stage;
+        $store->orderData = $data['order'] ?? [];
 
-        $plans = &$store->getAttendingPlans();
+        $plans = &$store->attendingPlans;
         $attendGroup = $data['attends'] ?? [];
 
         foreach ($data['quantity'] ?? [] as $planId => $qty) {
@@ -160,13 +160,11 @@ class EventAttendingService
             $attends = $attendGroup[$plan->id] ?? [];
 
             $planData = new EventAttendingPlan();
-            $planData->setPlan($plan);
-            $planData->setQuantity((int) $qty);
-            $planData->setPrice($plan->price);
-            $planData->setTotal(
-                $planData->getPrice()->multipliedBy((int) $qty)
-            );
-            $planData->setAttends(array_values($attends));
+            $planData->plan = $plan;
+            $planData->quantity = (int) $qty;
+            $planData->price = $plan->price;
+            $planData->total = $planData->price->multipliedBy((int) $qty);
+            $planData->attends = array_values($attends);
 
             $plans[] = $planData;
         }
@@ -179,16 +177,16 @@ class EventAttendingService
             $quota += $stage->alternate;
         }
 
-        if ($quota < ($stage->attends + $store->getTotalQuantity())) {
+        if ($quota < ($stage->attends + $store->totalQuantity)) {
             throw new ValidateFailException('活動名額已滿');
         }
 
-        $totals = $store->getTotals();
+        $totals = $store->totals;
         $totals->set(
             'grand_total',
             (new EventOrderTotal())
                 ->setTitle('總計')
-                ->setValue($store->getGrandTotal()->toFloat())
+                ->setValue($store->grandTotal->toFloat())
         );
 
         return $store;
