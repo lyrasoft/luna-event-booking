@@ -24,6 +24,11 @@ use Windwalker\Core\Language\LangService;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
 
+$eventId = $app->input('eventId');
+$stageId = $app->input('eventStageId');
+$cancelRoute = $stageId
+    ? $nav->to('event_stage_attend_list')->var('eventId', $eventId)->var('eventStageId', $stageId)
+    : $nav->to('event_attend_list');
 ?>
 
 <div x-title="toolbar" x-data="{ form: $store.form }" class="l-toolbar">
@@ -47,7 +52,7 @@ use Windwalker\Core\Router\SystemUri;
 
     {{-- Cancel --}}
     <a class="btn btn-default btn-outline-secondary btn-sm uni-btn-cancel"
-        href="{{ $nav->to('event_attend_list') }}">
+        href="{{ $cancelRoute }}">
         <span class="fa fa-times"></span>
         @lang('unicorn.toolbar.cancel')
     </a>

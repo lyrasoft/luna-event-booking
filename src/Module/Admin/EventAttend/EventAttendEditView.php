@@ -69,7 +69,7 @@ class EventAttendEditView implements ViewModelInterface
     protected function prepareMetadata(HtmlFrame $htmlFrame): void
     {
         $htmlFrame->setTitle(
-            $this->trans('unicorn.title.edit', title: 'EventAttend')
+            $this->trans('unicorn.title.edit', title: '報名者')
         );
     }
 }

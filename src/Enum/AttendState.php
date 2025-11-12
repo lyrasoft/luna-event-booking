@@ -8,12 +8,12 @@ use Windwalker\Utilities\Attributes\Enum\Color;
 use Windwalker\Utilities\Attributes\Enum\Icon;
 use Windwalker\Utilities\Attributes\Enum\Title;
 use Windwalker\Utilities\Contract\LanguageInterface;
-use Windwalker\Utilities\Enum\EnumTranslatableInterface;
-use Windwalker\Utilities\Enum\EnumTranslatableTrait;
+use Windwalker\Utilities\Enum\EnumRichInterface;
+use Windwalker\Utilities\Enum\EnumRichTrait;
 
-enum AttendState: string implements EnumTranslatableInterface
+enum AttendState: string implements EnumRichInterface
 {
-    use EnumTranslatableTrait;
+    use EnumRichTrait;
 
     #[Title('待處理')]
     #[Color('warning')]
@@ -37,6 +37,6 @@ enum AttendState: string implements EnumTranslatableInterface
 
     public function trans(LanguageInterface $lang, ...$args): string
     {
-        return $lang->trans('event.attend.state.' . $this->getKey());
+        return $lang->trans('event.attend.state.' . $this->name);
     }
 }

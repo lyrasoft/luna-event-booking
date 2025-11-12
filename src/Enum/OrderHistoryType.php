@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Lyrasoft\EventBooking\Enum;
 
 use Windwalker\Utilities\Contract\LanguageInterface;
-use Windwalker\Utilities\Enum\EnumTranslatableInterface;
-use Windwalker\Utilities\Enum\EnumTranslatableTrait;
+use Windwalker\Utilities\Enum\EnumRichInterface;
+use Windwalker\Utilities\Enum\EnumRichTrait;
 
-enum OrderHistoryType: string implements EnumTranslatableInterface
+enum OrderHistoryType: string implements EnumRichInterface
 {
-    use EnumTranslatableTrait;
+    use EnumRichTrait;
 
     case MEMBER = 'member';
     case ADMIN = 'admin';
@@ -18,6 +18,6 @@ enum OrderHistoryType: string implements EnumTranslatableInterface
 
     public function trans(LanguageInterface $lang, ...$args): string
     {
-        return $lang->trans('event.order.history.type.' . $this->getKey());
+        return $lang->trans('event.order.history.type.' . $this->name);
     }
 }

@@ -13,15 +13,15 @@ interface EventPaymentInterface
 {
     public static function getId(): string;
 
-    public static function getTitle(LanguageInterface $lang): string;
+    public static function getTypeTitle(LanguageInterface $lang): string;
 
     public static function getDescription(LanguageInterface $lang): string;
+
+    public function getTitle(LanguageInterface $lang): string;
 
     public function process(EventAttendingStore $store): mixed;
 
     public function orderInfo(EventOrder $order, iterable $attends): string;
 
-    public function runTask(AppContext $app, EventOrder $order): mixed;
-
-    public function createTransactionNo(EventOrder $order): string;
+    public function runTask(AppContext $app, EventOrder $order, string $task): mixed;
 }

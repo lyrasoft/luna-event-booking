@@ -49,7 +49,7 @@ class EventCheckoutService
 
         $this->orm->updateOne($order);
 
-        $attends = $store->allAttendEntities;
+        $attends = $store->getAllAttendEntities();
 
         foreach ($attends as $i => $attend) {
             $attend = $this->prepareEventAttend($order, $attend, $store);
@@ -76,12 +76,13 @@ class EventCheckoutService
         $order->state = $this->orderService->getInitialState($order);
         $order->histories
             ->unshift(
-                (new EventOrderHistory())
-                    ->setState($order->state)
-                    ->setStateText($order->state->getTitle($this->lang))
-                    ->setType(OrderHistoryType::SYSTEM)
-                    ->setMessage('訂單建立')
-                    ->setNotify(true)
+                new EventOrderHistory(
+                    type: OrderHistoryType::SYSTEM,
+                    state: $order->state,
+                    stateText: $order->state->getTitle($this->lang),
+                    notify: true,
+                    message: '訂單建立',
+                )
             );
 
         return $order;
@@ -109,7 +110,7 @@ class EventCheckoutService
             throw new \RuntimeException('付款方式不可用，請聯繫管理員');
         }
 
-        $order->transactionNo = $gateway->createTransactionNo($order);
+        $order->transactionNo = $this->paymentService->createNo($order);
 
         $this->orm->updateOne($order);
 

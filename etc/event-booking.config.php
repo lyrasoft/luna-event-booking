@@ -13,6 +13,7 @@ use Lyrasoft\EventBooking\Payment\TransferPayment;
 use Lyrasoft\Sequence\Service\SequenceService;
 use Lyrasoft\Toolkit\Encode\BaseConvert;
 use Windwalker\Core\Attributes\ConfigModule;
+use Windwalker\Core\DateTime\Clock;
 
 use function Lyrasoft\EventBooking\numberFormat;
 
@@ -34,7 +35,7 @@ static fn() => [
         'no_handler' => function (EventOrder $order, SequenceService $sequenceService) {
             return $sequenceService->getNextSerialWithPrefix(
                 'event_order',
-                'EVT' . \Windwalker\now('ym') . '-',
+                'EVT' . Clock::now()->format('ym') . '-',
                 5
             );
         },
@@ -45,7 +46,7 @@ static fn() => [
         'no_handler' => function (EventOrder $order, EventAttend $attend, SequenceService $sequenceService) {
             return $sequenceService->getNextSerialWithPrefix(
                 'event_attend',
-                'A' . \Windwalker\now('ym') . '-',
+                'A' . Clock::now()->format('ym') . '-',
                 6
             );
         },
@@ -67,7 +68,7 @@ static fn() => [
     'payment' => [
         'no_handler' => function (EventOrder $order) {
             // Max length: 20
-            $no = 'P' . str_pad((string) $order->id, 13, '0', STR_PAD_LEFT);
+            $no = 'P' . str_pad((string) $order->id, 12, '0', STR_PAD_LEFT);
 
             if (WINDWALKER_DEBUG) {
                 $no .= 'T' . BaseConvert::encode(time(), BaseConvert::BASE62);

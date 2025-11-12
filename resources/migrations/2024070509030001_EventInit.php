@@ -146,6 +146,7 @@ return new /** 2024070509030001_EventInit */ class extends AbstractMigration {
                 $schema->integer('alternates');
                 $schema->varchar('payment');
                 $schema->json('payment_data');
+                $schema->json('payment_params');
                 $schema->datetime('expired_at');
                 $schema->datetime('paid_at');
                 $schema->datetime('done_at');

@@ -80,6 +80,7 @@ $i = 0;
                                             name="{{ $fieldNamePrefix }}[name]"
                                             required
                                             value="{{ $attend['name'] ?? '' }}"
+                                            autocomplete="name"
                                         />
                                     </div>
 
@@ -94,6 +95,7 @@ $i = 0;
                                             name="{{ $fieldNamePrefix }}[email]"
                                             required
                                             value="{{ $attend['email'] ?? '' }}"
+                                            autocomplete="email"
                                         />
                                     </div>
                                 </div>
@@ -109,6 +111,7 @@ $i = 0;
                                             class="form-control"
                                             name="{{ $fieldNamePrefix }}[nick]"
                                             value="{{ $attend['nick'] ?? '' }}"
+                                            autocomplete="nick"
                                         />
                                     </div>
 
@@ -124,6 +127,7 @@ $i = 0;
                                             pattern="09\d{8}"
                                             required
                                             value="{{ $attend['mobile'] ?? '' }}"
+                                            autocomplete="mobile"
                                         />
                                         <div class="text-muted small mt-1">
                                             格式: 09 開頭共 10 碼數字，不加 -

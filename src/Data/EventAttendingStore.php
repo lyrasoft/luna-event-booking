@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lyrasoft\EventBooking\Data;
 
 use Brick\Math\BigDecimal;
+use Lyrasoft\EventBooking\Entity\Event;
 use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
 use Lyrasoft\EventBooking\Entity\EventStage;
@@ -20,30 +21,18 @@ class EventAttendingStore implements RecordInterface
     use RecordTrait;
 
     public function __construct(
+        public Event $event,
+        public EventStage $stage,
         public array $orderData = [],
         public ?EventOrder $order = null,
-        public EventStage $stage,
-        public EventOrderTotals $totals {
-            get => $this->totals ??= new EventOrderTotals();
+        public EventOrderTotals $totals = new EventOrderTotals() {
             set(EventOrderTotals|iterable $value) => EventOrderTotals::wrap($value);
         },
+        /**
+         * @var array<EventAttendingPlan>
+         */
         public array $attendingPlans = [],
     ) {
-    }
-
-    /**
-     * @return  array<EventAttendingPlan>
-     */
-    public function &getAttendingPlans(): array
-    {
-        return $this->attendingPlans;
-    }
-
-    public function setAttendingPlans(array $attendingPlans): static
-    {
-        $this->attendingPlans = $attendingPlans;
-
-        return $this;
     }
 
     /**

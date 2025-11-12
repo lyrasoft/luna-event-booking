@@ -22,6 +22,7 @@ use Lyrasoft\EventBooking\Data\EventOrderTotal;
 use Lyrasoft\EventBooking\Entity\Event;
 use Lyrasoft\EventBooking\Entity\EventOrder;
 use Lyrasoft\EventBooking\Entity\EventStage;
+use Lyrasoft\EventBooking\Service\EventPaymentService;
 use Lyrasoft\EventBooking\Service\PriceFormatter;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
@@ -61,17 +62,18 @@ $histories = $item->histories;
                 <div class="row l-order-info">
                     {{-- Col 1 --}}
                     <div class="col-lg-4">
-                        <x-order-info.col1 :item="$item" :event="$event" :stage="$stage"></x-order-info.col1>
+                        <x-event.order-info.col1 :item="$item" :event="$event"
+                            :stage="$stage"></x-event.order-info.col1>
                     </div>
 
                     {{-- Col 2 --}}
                     <div class="col-lg-4">
-                        <x-order-info.col2 :item="$item"></x-order-info.col2>
+                        <x-event.order-info.col2 :item="$item"></x-event.order-info.col2>
                     </div>
 
                     {{-- Col 3 --}}
                     <div class="col-lg-4">
-                        <x-order-info.col3 :item="$item"></x-order-info.col3>
+                        <x-event.order-info.col3 :item="$item"></x-event.order-info.col3>
                     </div>
                 </div>
 
@@ -87,7 +89,7 @@ $histories = $item->histories;
                         參與人員
                     </h4>
 
-                    <x-order-info.attends :item="$item" :attends="$attends"></x-order-info.attends>
+                    <x-event.order-info.attends :item="$item" :attends="$attends"></x-event.order-info.attends>
 
                     <div class="card-body">
                         @php
@@ -125,7 +127,7 @@ $histories = $item->histories;
                                     {!! html_escape($history->message, true) !!}
                                 </td>
                                 <td>
-                                    {{ $truenos->toLocalFormat($history->created, 'Y/m/d H:i') }}
+                                    {{ $chronos->toLocalFormat($history->created, 'Y/m/d H:i') }}
                                 </td>
                             </tr>
                         @endforeach

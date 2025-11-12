@@ -22,6 +22,7 @@ use Lyrasoft\EventBooking\Entity\EventPlan;
 use Lyrasoft\EventBooking\Entity\EventStage;
 use Lyrasoft\EventBooking\Service\PriceFormatter;
 use Lyrasoft\Luna\Entity\Category;
+use Unicorn\Script\UnicornScript;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\DateTime\ChronosService;
@@ -37,6 +38,8 @@ use Windwalker\Core\Router\SystemUri;
  */
 
 $priceFormatter = $app->retrieve(PriceFormatter::class);
+$uniScript = $app->retrieve(UnicornScript::class);
+
 ?>
 
 @extends('global.body')
@@ -171,6 +174,7 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                                         <select name="quantity[{{ $plan->id }}]"
                                             id="input-quantity-{{ $plan->id }}"
                                             class="form-select ms-auto"
+                                            uni-plan-quantity="@json(['id' => $plan->id])"
                                         >
                                             <option value="">- 選擇人數 -</option>
                                             @foreach (range(1, $plan->onceMax) as $n)
@@ -184,13 +188,18 @@ $priceFormatter = $app->retrieve(PriceFormatter::class);
                             </tr>
                         @endforeach
                         </tbody>
+                        @php
+                        $uniScript->data('can.attend', $canAttend)
+                        @endphp
                         <tfoot>
                         <tr>
                             <td colspan="10" class="text-end">
                                 <button type="submit" class="btn btn-primary"
                                     data-dos
                                     style="min-width: 150px"
-                                    @attr('disabled', !$canAttend)
+                                    uni-submit-button="@json(compact('canAttend'))"
+                                    data-task="submit"
+                                    disabled
                                 >
                                     報名
                                 </button>

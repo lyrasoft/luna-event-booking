@@ -12,11 +12,14 @@ use Windwalker\Utilities\Contract\LanguageInterface;
 
 class TransferPayment implements EventPaymentInterface
 {
+    use PaymentTrait;
+
     public function __construct(
         protected ApplicationInterface $app,
-        protected ?\Closure $renderHandler
+        protected ?\Closure $renderHandler,
+        string $title = '',
     ) {
-        //
+        $this->title = $title;
     }
 
     public static function getId(): string
@@ -24,9 +27,14 @@ class TransferPayment implements EventPaymentInterface
         return 'transfer';
     }
 
-    public static function getTitle(LanguageInterface $lang): string
+    public static function getTypeTitle(LanguageInterface $lang): string
     {
         return '轉帳付款';
+    }
+
+    public function getTitle(LanguageInterface $lang): string
+    {
+        return $this->title ?: '轉帳付款';
     }
 
     public static function getDescription(LanguageInterface $lang): string
@@ -39,7 +47,7 @@ class TransferPayment implements EventPaymentInterface
         return null;
     }
 
-    public function runTask(AppContext $app, EventOrder $order): mixed
+    public function runTask(AppContext $app, EventOrder $order, string $task): mixed
     {
         return '';
     }

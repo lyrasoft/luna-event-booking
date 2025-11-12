@@ -13,6 +13,9 @@ use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\DI\Attributes\Autowire;
 
+use function Windwalker\tap;
+use function Windwalker\value;
+
 #[Controller()]
 class EventAttendController
 {
@@ -27,7 +30,15 @@ class EventAttendController
         $uri = $app->call($controller->saveWithNamespace(...), compact('repository', 'form'));
 
         return match ($app->input('task')) {
-            'save2close' => $nav->to('event_attend_list'),
+            'save2close' => value(
+                function () use ($nav, $app) {
+                    $eventId = $app->input('eventId');
+                    $stageId = $app->input('eventStageId');
+                    return $stageId
+                        ? $nav->to('event_stage_attend_list')->var('eventId', $eventId)->var('eventStageId', $stageId)
+                        : $nav->to('event_attend_list');
+                }
+            ),
             default => $uri,
         };
     }

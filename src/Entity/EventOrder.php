@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Lyrasoft\EventBooking\Data\EventOrderHistories;
 use Lyrasoft\EventBooking\Data\EventOrderTotals;
 use Lyrasoft\EventBooking\Data\InvoiceData;
+use Lyrasoft\EventBooking\Data\PaymentParams;
 use Lyrasoft\EventBooking\Enum\EventOrderState;
 use Lyrasoft\EventBooking\Enum\InvoiceType;
 use Lyrasoft\Luna\Attributes\Author;
@@ -30,6 +31,7 @@ use Windwalker\ORM\Cast\JsonCast;
 use Windwalker\ORM\EntityInterface;
 use Windwalker\ORM\EntityTrait;
 use Windwalker\ORM\Metadata\EntityMetadata;
+use Windwalker\ORM\Attributes\JsonObject;
 
 // phpcs:disable
 // todo: remove this when phpcs supports 8.4
@@ -132,6 +134,12 @@ class EventOrder implements EntityInterface
     #[Column('payment_data')]
     #[Cast(JsonCast::class)]
     public array $paymentData = [];
+    #[Column('payment_params')]
+    #[JsonObject]
+    public PaymentParams $paymentParams {
+        set(PaymentParams|array|null $value) => $this->paymentParams = PaymentParams::wrap($value);
+        get => $this->paymentParams ??= new PaymentParams();
+    }
 
     #[Column('expired_at')]
     #[CastNullable(ServerTimeCast::class)]

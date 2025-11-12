@@ -7,6 +7,7 @@ namespace Lyrasoft\EventBooking\Data;
 use Windwalker\Data\RecordInterface;
 use Windwalker\Data\RecordTrait;
 
+#[\AllowDynamicProperties]
 class InvoiceData implements RecordInterface
 {
     use RecordTrait;

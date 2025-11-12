@@ -44,8 +44,6 @@ use Windwalker\Form\Form;
         action="{{ $nav->to('event_attend_edit') }}"
         method="POST" enctype="multipart/form-data">
 
-        <x-title-bar :form="$form" ns="item"></x-title-bar>
-
         <div class="row">
             <div class="col-lg-7">
                 <x-fieldset name="basic" :title="$lang('unicorn.fieldset.basic')"

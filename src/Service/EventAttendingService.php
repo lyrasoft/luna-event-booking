@@ -7,6 +7,7 @@ namespace Lyrasoft\EventBooking\Service;
 use Lyrasoft\EventBooking\Data\EventAttendingPlan;
 use Lyrasoft\EventBooking\Data\EventAttendingStore;
 use Lyrasoft\EventBooking\Data\EventOrderTotal;
+use Lyrasoft\EventBooking\Entity\Event;
 use Lyrasoft\EventBooking\Entity\EventPlan;
 use Lyrasoft\EventBooking\Entity\EventStage;
 use Lyrasoft\EventBooking\Exception\InvalidPlanException;
@@ -135,11 +136,13 @@ class EventAttendingService
         }
 
         $data = $this->getAttendingDataFromSession($stage->id);
+        $event = $this->orm->mustFindOne(Event::class, $stage->eventId);
 
-        $store = new EventAttendingStore();
-
-        $store->stage = $stage;
-        $store->orderData = $data['order'] ?? [];
+        $store = new EventAttendingStore(
+            event: $event,
+            stage: $stage,
+            orderData: $data['order'] ?? []
+        );
 
         $plans = &$store->attendingPlans;
         $attendGroup = $data['attends'] ?? [];
@@ -159,12 +162,12 @@ class EventAttendingService
 
             $attends = $attendGroup[$plan->id] ?? [];
 
-            $planData = new EventAttendingPlan();
-            $planData->plan = $plan;
-            $planData->quantity = (int) $qty;
-            $planData->price = $plan->price;
-            $planData->total = $planData->price->multipliedBy((int) $qty);
-            $planData->attends = array_values($attends);
+            $planData = new EventAttendingPlan(
+                plan: $plan,
+                quantity: (int) $qty,
+                price: $plan->price,
+                attends: array_values($attends)
+            );
 
             $plans[] = $planData;
         }
@@ -177,16 +180,17 @@ class EventAttendingService
             $quota += $stage->alternate;
         }
 
-        if ($quota < ($stage->attends + $store->totalQuantity)) {
+        if ($quota < ($stage->attends + $store->getTotalQuantity())) {
             throw new ValidateFailException('活動名額已滿');
         }
 
         $totals = $store->totals;
         $totals->set(
             'grand_total',
-            (new EventOrderTotal())
-                ->setTitle('總計')
-                ->setValue($store->grandTotal->toFloat())
+            new EventOrderTotal(
+                title: '總計',
+                value: $store->getGrandTotal()->toFloat()
+            )
         );
 
         return $store;

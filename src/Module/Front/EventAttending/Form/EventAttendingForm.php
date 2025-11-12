@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lyrasoft\EventBooking\Module\Front\EventAttending\Form;
 
 use Lyrasoft\EventBooking\Enum\InvoiceType;
+use Lyrasoft\EventBooking\Field\PaymentListField;
 use Windwalker\Form\Attributes\Fieldset;
 use Windwalker\Form\Attributes\FormDefine;
 use Windwalker\Form\Attributes\NS;
@@ -32,6 +33,11 @@ class EventAttendingForm
             ->label('付款者手機')
             ->pattern('09\d{8}')
             ->help('格式: 09 開頭共 10 碼數字，不加 -');
+
+        $form->add('payment', PaymentListField::class)
+            ->label('付款方式')
+            ->option('- 請選擇付款方式 -', '')
+            ->required(true);
 
         $form->add('invoice_type', RadioField::class)
             ->label('發票類型')

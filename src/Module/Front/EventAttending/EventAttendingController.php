@@ -16,6 +16,7 @@ use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\Manager\Logger;
+use Windwalker\Http\HttpClient;
 use Windwalker\ORM\ORM;
 
 use function Windwalker\response;
@@ -50,7 +51,7 @@ class EventAttendingController
         $storage = $eventAttendingService->getAttendingStore($stage);
 
         // Is empty
-        if ($storage->totalQuantity === 0) {
+        if ($storage->getTotalQuantity() === 0) {
             $app->addMessage('沒有報名資訊', 'warning');
 
             return $app->getNav()->back();
@@ -126,7 +127,8 @@ class EventAttendingController
                 $order->phone = $orderData['phone'] ?? '';
                 $order->address = $orderData['address'] ?? '';
                 $order->details = $orderData['details'] ?? [];
-                $order->payment = 'atm';
+                $order->payment = $orderData['payment'] ?? '';
+                $order->paymentData = $orderData['payment_data'] ?? [];
                 $order->snapshots = compact('event', 'stage');
                 $order->attends = count($store->getAllAttends());
 
@@ -159,7 +161,7 @@ class EventAttendingController
                         $attendEntities[] = $attend;
                     }
 
-                    $attendingPlan->setAttendEntities($attendEntities);
+                    $attendingPlan->attendEntities = $attendEntities;
                 }
 
                 $eventCheckoutService->processOrderAndSave($store);
@@ -188,19 +190,35 @@ class EventAttendingController
     public function paymentTask(AppContext $app, ORM $orm, EventPaymentService $paymentService)
     {
         $id = $app->input('id');
+        $task = $app->input('task');
 
-        $order = $orm->findOne(EventOrder::class, $id);
+        Logger::info('event-booking/payment-task', $uri = $app->getSystemUri()->full());
+        Logger::info('event-booking/payment-task', print_r($app->input()->dump(), true));
 
-        if (!$order) {
-            return 'Order not found';
+        try {
+            $order = $orm->findOne(EventOrder::class, $id);
+
+            if (!$order) {
+                throw new \RuntimeException('Order not found.');
+            }
+
+            $gateway = $paymentService->getGateway($order->payment);
+
+            if (!$gateway) {
+                throw new \RuntimeException('Gateway not found.');
+            }
+
+            $http = new HttpClient();
+            Logger::info(
+                'event-booking/payment-task',
+                $http->toCurlCmd('POST', $uri, HttpClient::formData($app->input()->dump()))
+            );
+
+            return $gateway->runTask($app, $order, $task);
+        } catch (\Throwable $e) {
+            Logger::info('event-booking/payment-error', $e);
+
+            return $e->getMessage();
         }
-
-        $gateway = $paymentService->getGateway($order->payment);
-
-        if ($gateway) {
-            return 'Gateway not found.';
-        }
-
-        return $gateway->runTask($app, $order);
     }
 }

@@ -127,3 +127,44 @@ $menu->registerChildren(
 
 ```
 
+## Payments
+
+### Add Ecpay Payment
+
+Install Ecpay SDK
+
+```bash
+composer require ecpay/sdk
+```
+
+Register Ecpay payments
+
+```php
+    'payment' => [
+        // ...
+
+        'gateways' => [
+            // ...
+            'ecpay_credit' => fn () => create(
+                \Lyrasoft\EventBooking\Payment\EcpayPayment::class,
+                type: EcpayPaymentType::CREDIT,
+            ),
+            'ecpay_atm' => fn () => create(
+                \Lyrasoft\EventBooking\Payment\EcpayPayment::class,
+                type: EcpayPaymentType::ATM
+            ),
+            'ecpay_cvs' => fn () => create(
+                \Lyrasoft\EventBooking\Payment\EcpayPayment::class,
+                type: EcpayPaymentType::CVS
+            ),
+        ],
+    ],
+```
+
+And add this to `.env` and `.env.dist`
+
+```dotenv
+EVENT_ECPAY_MERCHANT_ID=2000132
+EVENT_ECPAY_HASH_KEY=5294y06JbISpM5x9
+EVENT_ECPAY_HASH_IV=v77hoKGq4kWxNNIS
+```

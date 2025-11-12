@@ -143,6 +143,12 @@ class EventAttendListView implements ViewModelInterface, FilterAwareViewModelInt
             'event_attend.id',
             'event_attend.title',
             'event_attend.alias',
+            'event_attend.name',
+            'event_attend.email',
+            'event_attend.nick',
+            'event_attend.mobile',
+            'event_attend.phone',
+            'event_attend.address',
         ];
     }
 
