@@ -34,6 +34,8 @@ $attributes->props(
     'item',
 );
 
+$payment = $item->paymentParams->paymentTitle ?: $item->payment;
+
 ?>
 <x-card class="l-order-info__col3">
     <table class="c-order-info-table">

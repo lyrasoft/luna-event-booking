@@ -11,6 +11,8 @@ class PaymentParams implements RecordInterface
 {
     use RecordTrait;
 
+    public string $paymentTitle = '';
+
     public array $input = [];
 
     public array $info = [];

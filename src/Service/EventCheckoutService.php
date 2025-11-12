@@ -111,6 +111,7 @@ class EventCheckoutService
         }
 
         $order->transactionNo = $this->paymentService->createNo($order);
+        $order->paymentParams->paymentTitle = $gateway->getTitle($this->lang);
 
         $this->orm->updateOne($order);
 
