@@ -168,3 +168,17 @@ EVENT_ECPAY_MERCHANT_ID=2000132
 EVENT_ECPAY_HASH_KEY=5294y06JbISpM5x9
 EVENT_ECPAY_HASH_IV=v77hoKGq4kWxNNIS
 ```
+
+Add exclude to `CsrfMiddleware` for Ecpay notify URL
+
+```php
+// routes/front.route.php
+
+    ->middleware(
+        CsrfMiddleware::class,
+        excludes: [
+            // ...
+            'front::event_payment_task',
+        ]
+    )
+```
