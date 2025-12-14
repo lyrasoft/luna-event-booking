@@ -91,7 +91,7 @@ class EventAttendListView implements ViewModelInterface, FilterAwareViewModelInt
             )
             ->tapIf(
                 (bool) $eventStage,
-                fn(ListSelector $selector) => $selector->where('event_attend.stage_id', $eventStage->eventId)
+                fn(ListSelector $selector) => $selector->where('event_attend.stage_id', $eventStage->id)
             )
             ->where('order.state', [EventOrderState::DONE, EventOrderState::PENDING_APPROVAL])
             ->ordering($ordering)
