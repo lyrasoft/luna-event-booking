@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\EventBooking\Module\Admin\EventAttend\Form;
 
+use Lyrasoft\EventBooking\Enum\AttendState;
 use Lyrasoft\EventBooking\Field\EventModalField;
 use Lyrasoft\EventBooking\Field\EventStageModalField;
 use Unicorn\Enum\BasicState;
@@ -39,7 +40,7 @@ class GridForm
         $form->add('event_attend.state', ListField::class)
             ->label($this->trans('unicorn.field.state'))
             ->option($this->trans('unicorn.select.placeholder'), '')
-            ->registerFromEnums(BasicState::class, $this->lang)
+            ->registerFromEnums(AttendState::class, $this->lang)
             ->onchange('this.form.submit()');
 
         if (!$this->inStage) {
