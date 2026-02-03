@@ -6,14 +6,20 @@ namespace Lyrasoft\EventBooking\Service;
 
 use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
+use Lyrasoft\EventBooking\Entity\EventStage;
 use Lyrasoft\EventBooking\Enum\AttendState;
 use Lyrasoft\EventBooking\EventBookingPackage;
+use Lyrasoft\Luna\Entity\User;
 use Windwalker\Core\Application\ApplicationInterface;
+use Windwalker\Core\Database\ORMAwareTrait;
 use Windwalker\DI\Attributes\Service;
+use Windwalker\Query\Query;
 
 #[Service]
 class EventAttendeeService
 {
+    use ORMAwareTrait;
+
     public function __construct(protected ApplicationInterface $app, protected EventBookingPackage $eventBooking)
     {
     }
@@ -54,5 +60,23 @@ class EventAttendeeService
                 EventAttend::class => $attend,
             ]
         );
+    }
+
+    public function getUserAttend(EventStage|int $eventStage, User|int $user, ?AttendState $state = null): ?EventAttend
+    {
+        $eventStageId = $eventStage instanceof EventStage ? $eventStage->id : $eventStage;
+        $userId = $user instanceof User ? $user->id : $user;
+
+        /** @var ?EventAttend $attend */
+        $attend = $this->orm->from(EventAttend::class)
+            ->where('stage_id', $eventStageId)
+            ->where('user_id', $userId)
+            ->tapIf(
+                (bool) $state,
+                fn (Query $query) => $query->where('state', $state)
+            )
+            ->get(EventAttend::class);
+
+        return $attend;
     }
 }
