@@ -26,4 +26,13 @@ trait PaymentTrait
     {
         return $this->title;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => static::getId(),
+            'title' => $this->getTitle(),
+            'description' => static::getDescription(),
+        ];
+    }
 }
