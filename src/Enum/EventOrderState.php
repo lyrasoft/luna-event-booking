@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lyrasoft\EventBooking\Enum;
 
 use Windwalker\Utilities\Attributes\Enum\Color;
-use Windwalker\Utilities\Contract\LanguageInterface;
 use Windwalker\Utilities\Enum\EnumRichInterface;
 use Windwalker\Utilities\Enum\EnumRichTrait;
 
@@ -26,8 +25,8 @@ enum EventOrderState: string implements EnumRichInterface
     #[Color('danger')]
     case FAIL = 'fail';
 
-    public function trans(LanguageInterface $lang, ...$args): string
+    protected function translateKey(string $name): string
     {
-        return $lang->trans('event.order.state.' . $this->name);
+        return 'event.order.state.' . $name;
     }
 }
