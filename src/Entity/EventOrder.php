@@ -75,7 +75,7 @@ class EventOrder implements EntityInterface
 
     #[Column('total')]
     public float $total = 0.0 {
-        set(float|int|string|BigNumber $value) => $this->total = BigDecimal::of($value)->toFloat();
+        set(float|int|string|BigNumber $value) => $this->total = BigDecimal::of((string) $value)->toFloat();
     }
 
     #[Column('totals')]

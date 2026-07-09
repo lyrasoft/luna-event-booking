@@ -17,7 +17,7 @@ class EventAttendingPlan implements RecordInterface
 
     public BigDecimal $price {
         set(mixed $value) {
-            $this->price = BigDecimal::of($value);
+            $this->price = BigDecimal::of((string) $value);
 
             $this->calcTotal();
         }
