@@ -87,7 +87,7 @@ return new /** EventOrder Seeder */ class extends AbstractSeeder {
                     'plan' => $plan
                 ];
 
-                $total = $total->plus($attend->price);
+                $total = $total->plus((string) $attend->price);
 
                 $attends[] = $attend;
             }
