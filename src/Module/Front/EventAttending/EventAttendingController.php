@@ -7,6 +7,8 @@ namespace Lyrasoft\EventBooking\Module\Front\EventAttending;
 use Lyrasoft\EventBooking\Data\EventAttendingStore;
 use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
+use Lyrasoft\EventBooking\Enum\InvoiceType;
+use Lyrasoft\EventBooking\Module\Front\EventAttending\Form\EventAttendingForm;
 use Lyrasoft\EventBooking\Service\EventAttendingService;
 use Lyrasoft\EventBooking\Service\EventCheckoutService;
 use Lyrasoft\EventBooking\Service\EventOrderService;
@@ -15,7 +17,10 @@ use Lyrasoft\EventBooking\Service\EventViewService;
 use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
+use Windwalker\Core\Form\FormFactory;
 use Windwalker\Core\Manager\Logger;
+use Windwalker\Filter\Rule\EmailAddress;
+use Windwalker\Form\Form;
 use Windwalker\Http\HttpClient;
 use Windwalker\ORM\ORM;
 
@@ -67,7 +72,8 @@ class EventAttendingController
         EventAttendingService $eventAttendingService,
         EventViewService $eventViewService,
         EventCheckoutService $eventCheckoutService,
-        EventOrderService $eventOrderService
+        EventOrderService $eventOrderService,
+        FormFactory $formFactory
     ) {
         [$stageId, $order, $attends] = $app->input(
             'stageId',
@@ -83,6 +89,16 @@ class EventAttendingController
         if ($data === null) {
             return response()->redirect($app->getSystemUri()->root());
         }
+
+        $orderForm = $this->createOrderForm($formFactory, $order);
+
+        if (!$orderForm || !$this->validateCheckoutData($orderForm, $order, $attends)) {
+            $app->addMessage('報名資料格式不正確，請重新確認', 'warning');
+
+            return $app->getNav()->to('event_attending')->var('stageId', $stage->id);
+        }
+
+        $order = $orderForm->filter(['order' => $order])['order'];
 
         $data['order'] = $order;
         $data['attends'] = $attends;
@@ -185,6 +201,85 @@ class EventAttendingController
 
             return $orderUri;
         }
+    }
+
+    protected function createOrderForm(FormFactory $formFactory, mixed $order): ?Form
+    {
+        if (!is_array($order) || !$this->isStringTree($order)) {
+            return null;
+        }
+
+        $invoiceType = $order['invoice_type'] ?? null;
+
+        if (!is_string($invoiceType) || !InvoiceType::tryFrom($invoiceType)) {
+            return null;
+        }
+
+        $form = $formFactory->create(EventAttendingForm::class);
+
+        // Conditional fields: only keep the ones matching the invoice type
+        if ($invoiceType === InvoiceType::BUSINESS->value) {
+            $form->removeField('order/invoice_data/carrier_code');
+        } else {
+            $form->removeField('order/invoice_data/title');
+            $form->removeField('order/invoice_data/vat');
+        }
+
+        return $form;
+    }
+
+    protected function validateCheckoutData(Form $form, mixed $order, mixed $attends): bool
+    {
+        if (!is_array($attends) || !$this->isStringTree($attends)) {
+            return false;
+        }
+
+        if ($form->validate(['order' => $order])->isFailure()) {
+            return false;
+        }
+
+        $emailValidator = new EmailAddress();
+
+        foreach ($attends as $planAttends) {
+            if (!is_array($planAttends)) {
+                return false;
+            }
+
+            foreach ($planAttends as $attend) {
+                if (!is_array($attend)) {
+                    return false;
+                }
+
+                if (
+                    trim((string) ($attend['name'] ?? '')) === ''
+                    || !$emailValidator->test((string) ($attend['email'] ?? ''))
+                    || preg_match('/^09\d{8}$/', (string) ($attend['mobile'] ?? '')) !== 1
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    protected function isStringTree(mixed $value): bool
+    {
+        if (is_string($value)) {
+            return true;
+        }
+
+        if (!is_array($value)) {
+            return false;
+        }
+
+        foreach ($value as $item) {
+            if (!$this->isStringTree($item)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function paymentTask(AppContext $app, ORM $orm, EventPaymentService $paymentService)

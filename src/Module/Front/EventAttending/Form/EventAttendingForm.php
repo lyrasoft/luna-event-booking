@@ -6,6 +6,8 @@ namespace Lyrasoft\EventBooking\Module\Front\EventAttending\Form;
 
 use Lyrasoft\EventBooking\Enum\InvoiceType;
 use Lyrasoft\EventBooking\Field\PaymentListField;
+use Windwalker\Filter\Rule\EmailAddress;
+use Windwalker\Filter\Rule\Regex;
 use Windwalker\Form\Attributes\Fieldset;
 use Windwalker\Form\Attributes\FormDefine;
 use Windwalker\Form\Attributes\NS;
@@ -27,11 +29,13 @@ class EventAttendingForm
 
         $form->add('email', TextField::class)
             ->label('付款者 Email')
+            ->addValidator(new EmailAddress())
             ->required(true);
 
         $form->add('mobile', TelField::class)
             ->label('付款者手機')
             ->pattern('09\d{8}')
+            ->addValidator(new Regex('/^09\d{8}$/', Regex::TYPE_MATCH))
             ->help('格式: 09 開頭共 10 碼數字，不加 -');
 
         $form->add('payment', PaymentListField::class)
@@ -47,7 +51,8 @@ class EventAttendingForm
         $form->add('invoice_data/carrier_code', TextField::class)
             ->set('showon', ['order/invoice_type' => InvoiceType::PERSONAL->value])
             ->label('載具編號')
-            ->pattern('\/[0-9A-Z\.-+]{7}');
+            ->pattern('\/[0-9A-Z\.+-]{7}')
+            ->addValidator(new Regex('/^\/[0-9A-Z.+-]{7}$/', Regex::TYPE_MATCH));
 
         $form->add('invoice_data/title', TextField::class)
             ->label('發票抬頭')
@@ -57,6 +62,8 @@ class EventAttendingForm
         $form->add('invoice_data/vat', TextField::class)
             ->label('發票統編')
             ->set('showon', ['order/invoice_type' => InvoiceType::BUSINESS->value])
+            ->pattern('\d{8}')
+            ->addValidator(new Regex('/^\d{8}$/', Regex::TYPE_MATCH))
             ->required(true);
     }
 }
