@@ -191,9 +191,14 @@ class EventAttendingController
     {
         $id = $app->input('id');
         $task = $app->input('task');
+        $input = $app->input()->dump();
+
+        if (isset($input['CheckMacValue'])) {
+            $input['CheckMacValue'] = '******';
+        }
 
         Logger::info('event-booking/payment-task', $uri = $app->getSystemUri()->full());
-        Logger::info('event-booking/payment-task', print_r($app->input()->dump(), true));
+        Logger::info('event-booking/payment-task', print_r($input, true));
 
         try {
             $order = $orm->findOne(EventOrder::class, $id);
@@ -211,14 +216,14 @@ class EventAttendingController
             $http = new HttpClient();
             Logger::info(
                 'event-booking/payment-task',
-                $http->toCurlCmd('POST', $uri, HttpClient::formData($app->input()->dump()))
+                $http->toCurlCmd('POST', $uri, HttpClient::formData($input))
             );
 
             return $gateway->runTask($app, $order, $task);
         } catch (\Throwable $e) {
             Logger::info('event-booking/payment-error', $e);
 
-            return $e->getMessage();
+            return '0|Payment task failed.';
         }
     }
 }

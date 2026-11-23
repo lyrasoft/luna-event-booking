@@ -89,7 +89,9 @@ class EcpayPayment implements EventPaymentInterface
             'TradeDesc' => UrlService::ecpayUrlEncode('Shop Checkout'),
             'ItemName' => implode("#", $desc),
             'ReturnURL' => $this->replaceWebhookUrl($notify->task('receivePaid')),
-            'ClientBackURL' => $notify->task('returnBack'),
+            'ClientBackURL' => $notify->task('returnBack') . '&' . http_build_query(
+                ['MerchantTradeNo' => $order->transactionNo]
+            ),
             'ChoosePayment' => $this->type->value,
             'EncryptType' => 1,
 
@@ -208,7 +210,18 @@ class EcpayPayment implements EventPaymentInterface
     public function returnBack(AppContext $app, Navigator $nav): RouteUri
     {
         $id = (string) $app->input('id');
-        $order = $this->orm->mustFindOne(EventOrder::class, $id);
+        $merchantTradeNo = (string) $app->input('MerchantTradeNo');
+        $order = $this->orm->findOne(EventOrder::class, $id);
+
+        if (
+            !$order
+            || $order->transactionNo === ''
+            || !hash_equals($order->transactionNo, $merchantTradeNo)
+        ) {
+            Logger::error('event-booking/ecpay-return-back-error', 'ID: ' . $id);
+
+            throw new \RuntimeException('Invalid return request.');
+        }
 
         // $app->state->forget('checkout.data');
 
