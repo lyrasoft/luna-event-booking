@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Lyrasoft\EventBooking\Module\Admin\EventCheckin;
 
-use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Entity\EventOrder;
 use Lyrasoft\EventBooking\Enum\AttendState;
 use Lyrasoft\EventBooking\Enum\EventOrderState;
 use Lyrasoft\EventBooking\Module\Admin\EventCheckin\EventCheckinView;
+use Lyrasoft\EventBooking\Service\EventCheckinService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\View\View;
@@ -17,18 +17,16 @@ use Windwalker\ORM\ORM;
 #[Controller]
 class EventCheckinController
 {
-    public function checkin(AppContext $app, ORM $orm)
+    public function checkin(AppContext $app, ORM $orm, EventCheckinService $checkinService)
     {
-        $no = $app->input('attendNo');
-
-        $attend = $orm->mustFindOne(EventAttend::class, compact('no'));
+        $attend = $checkinService->findAttendByToken((string) $app->input('token'));
         $order = $orm->mustFindOne(EventOrder::class, $attend->orderId);
 
         /** @var View $view */
         $view = $app->make(EventCheckinView::class);
 
         if ($attend->state === AttendState::CHECKED_IN) {
-            return $view->render();
+            return $view->render(['status' => 'fail', 'message' => '已完成報到']);
         }
 
         if ($order->state !== EventOrderState::DONE) {
@@ -39,6 +37,6 @@ class EventCheckinController
         $attend->checkedInAt = 'now';
         $orm->updateOne($attend);
 
-        return $view->render(['status' => 'fail', 'message' => '訂單未完成']);
+        return $view->render(['status' => 'success', 'message' => '報到成功']);
     }
 }

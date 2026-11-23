@@ -53,6 +53,10 @@ static fn() => [
         'initial_state' => static fn(EventOrder $order, EventAttend $attend) => AttendState::PENDING,
     ],
 
+    'checkin' => [
+        'secret' => env('EVENT_BOOKING_CHECKIN_SECRET'),
+    ],
+
     'invoice' => [
         'no_handler' => function (EventOrder $order, SequenceService $sequenceService) {
             return $sequenceService->getNextSerialWithPrefix(

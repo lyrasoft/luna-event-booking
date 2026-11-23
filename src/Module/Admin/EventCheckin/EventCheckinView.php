@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Lyrasoft\EventBooking\Module\Admin\EventCheckin;
 
-use Lyrasoft\EventBooking\Entity\EventAttend;
 use Lyrasoft\EventBooking\Enum\AttendState;
+use Lyrasoft\EventBooking\Service\EventCheckinService;
 use Unicorn\View\ORMAwareViewModelTrait;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\ViewModel;
-use Windwalker\Core\Router\Exception\RouteNotFoundException;
 use Windwalker\Core\View\View;
 use Windwalker\Core\View\ViewModelInterface;
 
@@ -39,14 +38,17 @@ class EventCheckinView implements ViewModelInterface
      */
     public function prepare(AppContext $app, View $view): array
     {
-        $no = $app->input('attendNo');
+        $token = (string) $app->input('token');
 
-        $attend = $this->orm->mustFindOne(EventAttend::class, compact('no'));
+        $attend = $app->make(EventCheckinService::class)->findAttendByToken($token);
 
-        if ($attend->state !== AttendState::CHECKED_IN) {
-            throw new RouteNotFoundException();
-        }
+        $checkedIn = $attend->state === AttendState::CHECKED_IN;
 
-        return compact('attend');
+        return [
+            'token' => $token,
+            'attendNo' => $attend->no,
+            'checkedIn' => $checkedIn,
+            'attend' => $checkedIn ? $attend : null,
+        ];
     }
 }

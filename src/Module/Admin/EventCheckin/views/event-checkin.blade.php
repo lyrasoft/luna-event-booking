@@ -35,25 +35,44 @@ use Windwalker\Core\Router\SystemUri;
 @section('superbody')
     <div class="my-5">
         <div class="text-center">
-            @if ($status ?? '' === 'fail')
+            @if (($status ?? '') === 'fail')
                 <h2>報到失敗</h2>
 
                 <div class="alert alert-danger">
                     {{ $message }}
                 </div>
-            @else
+            @elseif (($status ?? '') === 'success')
                 <h2>報到成功</h2>
 
-                <div class="mb-3">
-                    編號： #{{ $attend->no }}
+                <div class="alert alert-success">
+                    {{ $message }}
                 </div>
+            @elseif ($checkedIn)
+                <h2>已完成報到</h2>
+            @else
+                <h2>確認報到</h2>
+            @endif
 
+            <div class="mb-3">
+                編號： #{{ $attendNo }}
+            </div>
+
+            @if ($attend)
                 <div>
                     姓名： {{ $attend->name }}
                     @if ($attend->nick)
                         ({{ $attend->nick }})
                     @endif
                 </div>
+            @elseif (!$checkedIn)
+                <form action="{{ $nav->to('admin::event_checkin_submit')->var('token', $token)->full() }}"
+                    method="post">
+                    <x-csrf></x-csrf>
+
+                    <button type="submit" class="btn btn-primary">
+                        確認報到
+                    </button>
+                </form>
             @endif
         </div>
     </div>

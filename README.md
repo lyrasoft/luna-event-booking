@@ -55,6 +55,14 @@ Add these types to `category-seeder.php`
 
 WIP
 
+### Check-in
+
+Check-in QR codes are signed with HMAC-SHA256. Set a long random secret in the environment, otherwise attendee pages that render QR codes will throw an exception.
+
+```shell
+EVENT_BOOKING_CHECKIN_SECRET=your-long-random-secret
+```
+
 ### Session
 
 As EventBooking may need to redirect to outside Payment service to process checkout, you must disable `SameSite` cookie poilicy
