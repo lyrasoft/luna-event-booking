@@ -161,13 +161,16 @@ Register Ecpay payments
     ],
 ```
 
-And add this to `.env` and `.env.dist`
+And add these to `.env` and `.env.dist` (ECPay credentials are required, there are no defaults)
 
 ```dotenv
+# Development only: ECPay public sandbox credentials. Do NOT use in production.
 EVENT_ECPAY_MERCHANT_ID=2000132
 EVENT_ECPAY_HASH_KEY=5294y06JbISpM5x9
 EVENT_ECPAY_HASH_IV=v77hoKGq4kWxNNIS
 ```
+
+In production, inject your real ECPay `EVENT_ECPAY_MERCHANT_ID`, `EVENT_ECPAY_HASH_KEY` and `EVENT_ECPAY_HASH_IV` from the deployment environment. Never commit them to the repository. If any of them is missing, the ECPay payment will throw an exception.
 
 Add exclude to `CsrfMiddleware` for Ecpay notify URL
 
