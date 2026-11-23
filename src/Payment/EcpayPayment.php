@@ -162,11 +162,34 @@ class EcpayPayment implements EventPaymentInterface
             return '0|No order';
         }
 
+        $isSuccess = (string) $res['RtnCode'] === '1';
+
+        if (
+            (string) ($res['MerchantTradeNo'] ?? '') !== (string) $order->transactionNo
+            || (int) ($res['TradeAmt'] ?? 0) !== (int) $order->total
+        ) {
+            Logger::error('event-booking/ecpay-payment-error', 'ID: ' . $id);
+            Logger::error('event-booking/ecpay-payment-error', 'Trade no or amount mismatch');
+
+            return '0|Trade no or amount mismatch';
+        }
+
+        if (!in_array($order->state, [EventOrderState::UNPAID, EventOrderState::PENDING_APPROVAL], true)) {
+            if ($isSuccess && $order->state === EventOrderState::DONE) {
+                return '1|OK';
+            }
+
+            Logger::error('event-booking/ecpay-payment-error', 'ID: ' . $id);
+            Logger::error('event-booking/ecpay-payment-error', 'Order state not payable: ' . $order->state->value);
+
+            return '0|Order state not payable';
+        }
+
         $params = &$order->params;
         $params['payment_notify_error'] = null;
 
         try {
-            if ((string) $res['RtnCode'] === '1') {
+            if ($isSuccess) {
                 if (!$order->paidAt) {
                     $order->paidAt = 'now';
                 }
