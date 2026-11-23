@@ -216,15 +216,52 @@ class EcpayPayment implements EventPaymentInterface
             ->var('no', $order->no);
     }
 
-    public function paymentInfo(AppContext $app): string
+    public function paymentInfo(AppContext $app, ORM $orm): string
     {
-        $orm = $app->service(ORM::class);
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+            return '0|Method not allowed';
+        }
+
+        $factory = $this->getEcpayFactory();
+        /** @var VerifiedArrayResponse $checkoutResponse */
+        $checkoutResponse = $factory->create(VerifiedArrayResponse::class);
 
         $id = (string) $app->input('id');
 
-        $order = $orm->mustFindOne(EventOrder::class, $id);
+        try {
+            $res = $checkoutResponse->get($_POST);
+        } catch (\Exception $e) {
+            Logger::error('event-booking/ecpay-payment-error', 'ID: ' . $id);
+            Logger::error('event-booking/ecpay-payment-error', $e->getMessage());
 
-        $order->paymentParams->info = $app->input()->dump();
+            return '0|' . $e->getMessage();
+        }
+
+        $order = $orm->findOne(EventOrder::class, $id);
+
+        if (!$order) {
+            Logger::error('event-booking/ecpay-payment-error', 'ID: ' . $id);
+            Logger::error('event-booking/ecpay-payment-error', 'Order not found');
+
+            return '0|No order';
+        }
+
+        if (
+            $this->type !== EcpayPaymentType::ATM
+            || (string) ($res['MerchantTradeNo'] ?? '') !== (string) $order->transactionNo
+            || in_array($order->state, [EventOrderState::DONE, EventOrderState::CANCEL, EventOrderState::FAIL], true)
+        ) {
+            Logger::error('event-booking/ecpay-payment-error', 'ID: ' . $id);
+            Logger::error('event-booking/ecpay-payment-error', 'Payment info not applicable to order');
+
+            return '0|Invalid order';
+        }
+
+        $order->paymentParams->info = [
+            'BankCode' => (string) ($res['BankCode'] ?? ''),
+            'vAccount' => (string) ($res['vAccount'] ?? ''),
+            'ExpireDate' => (string) ($res['ExpireDate'] ?? ''),
+        ];
 
         $orm->updateOne($order);
 
