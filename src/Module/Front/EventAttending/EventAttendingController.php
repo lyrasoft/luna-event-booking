@@ -15,6 +15,7 @@ use Lyrasoft\EventBooking\Service\EventViewService;
 use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
+use Windwalker\Core\Form\Exception\ValidateFailException;
 use Windwalker\Core\Manager\Logger;
 use Windwalker\Http\HttpClient;
 use Windwalker\ORM\ORM;
@@ -139,6 +140,10 @@ class EventAttendingController
                     $attends = $attendingPlan->attends;
                     $attendEntities = [];
                     $plan = $attendingPlan->plan;
+
+                    if (count($attends) !== $attendingPlan->quantity) {
+                        throw new ValidateFailException('報名者資料筆數與購買數量不符');
+                    }
 
                     foreach ($attends as $attendData) {
                         $attend = new EventAttend();
