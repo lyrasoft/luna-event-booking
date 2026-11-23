@@ -18,6 +18,7 @@ namespace App\view;
 
 use chillerlan\QRCode\QRCode;
 use Lyrasoft\EventBooking\Entity\EventAttend;
+use Lyrasoft\EventBooking\Service\EventCheckinService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\DateTime\ChronosService;
@@ -35,7 +36,9 @@ $attributes->props(
     'attend'
 );
 
-$link = $nav->to('admin::event_checkin')->var('attendNo', $attend->no)->full();
+$checkinToken = $app->make(EventCheckinService::class)->createToken($attend);
+
+$link = $nav->to('admin::event_checkin')->var('token', $checkinToken)->full();
 
 $qrcode = (new QRCode())->render((string) $link);
 ?>
