@@ -284,10 +284,16 @@ class EcpayPayment implements EventPaymentInterface
      */
     protected function getEnvCredentials(): array
     {
-        return [
-            env("EVENT_ECPAY_MERCHANT_ID", '2000132'),
-            env("EVENT_ECPAY_HASH_KEY", '5294y06JbISpM5x9'),
-            env("EVENT_ECPAY_HASH_IV", 'v77hoKGq4kWxNNIS'),
-        ];
+        $merchantId = env('EVENT_ECPAY_MERCHANT_ID');
+        $hashKey = env('EVENT_ECPAY_HASH_KEY');
+        $hashIv = env('EVENT_ECPAY_HASH_IV');
+
+        if (!$merchantId || !$hashKey || !$hashIv) {
+            throw new \RuntimeException(
+                'ECPay credentials are not configured. Set EVENT_ECPAY_MERCHANT_ID, EVENT_ECPAY_HASH_KEY and EVENT_ECPAY_HASH_IV.'
+            );
+        }
+
+        return [$merchantId, $hashKey, $hashIv];
     }
 }
